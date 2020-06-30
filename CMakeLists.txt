@@ -37,6 +37,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 include("${CMAKE_BINARY_DIR}/conan_paths.cmake" OPTIONAL)
 
 find_package(yaml-cpp REQUIRED)
+find_package(argparse REQUIRED)
 
 include_directories("include")
 add_subdirectory(src)

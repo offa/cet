@@ -43,12 +43,12 @@ TEST_CASE("Parse config files returns empty if no entries", "[ConfigTest]")
 TEST_CASE("Parse config directories entries", "[ConfigTest]")
 {
     const auto config = cet::fromYaml("directories:\n - /tmp/dir/x/\n - /tmp/dir2/y\n - /tmp/dir_3/zzzz");
-    const auto files = config.getDirectories();
+    const auto dirs = config.getDirectories();
 
-    CHECK(files.size() == 3);
-    CHECK_THAT(files[0], Equals("/tmp/dir/x/"));
-    CHECK_THAT(files[1], Equals("/tmp/dir2/y"));
-    CHECK_THAT(files[2], Equals("/tmp/dir_3/zzzz"));
+    CHECK(dirs.size() == 3);
+    CHECK_THAT(dirs[0], Equals("/tmp/dir/x/"));
+    CHECK_THAT(dirs[1], Equals("/tmp/dir2/y"));
+    CHECK_THAT(dirs[2], Equals("/tmp/dir_3/zzzz"));
 }
 
 TEST_CASE("Parse config directories returns empty if no entries", "[ConfigTest]")

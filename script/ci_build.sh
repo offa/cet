@@ -17,6 +17,7 @@ fi
 mkdir build && cd build
 
 conan install \
+    --build=missing \
     -g cmake_find_package \
     -g cmake_paths \
     ..

@@ -23,19 +23,19 @@
 
 namespace cet
 {
+    namespace
+    {
+        Config::PathList toPathList(const YAML::Node& node)
+        {
+            Config::PathList paths;
+            std::transform(node.begin(), node.end(), std::back_inserter(paths),
+                           [](const auto& value) { return value.template as<std::string>(); });
+            return paths;
+        }
+    }
     Config fromYaml(const std::string& yaml)
     {
         const YAML::Node node = YAML::Load(yaml);
-
-        Config::PathList files;
-        const auto filesEntry = node["files"];
-        std::transform(filesEntry.begin(), filesEntry.end(), std::back_inserter(files), [](const auto& value) { return value.template as<std::string>(); });
-
-
-        Config::PathList dirs;
-        const auto directoriesEntry = node["directories"];
-        std::transform(directoriesEntry.begin(), directoriesEntry.end(), std::back_inserter(dirs), [](const auto& value) { return value.template as<std::string>(); });
-
-        return Config{files, dirs};
+        return Config{toPathList(node["files"]), toPathList(node["directories"])};
     }
 }

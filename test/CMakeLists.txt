@@ -5,7 +5,7 @@ target_link_libraries(TestMain PUBLIC Catch2::Catch2)
 
 
 add_executable(ConfigTest ConfigTest.cpp)
-target_link_libraries(ConfigTest PRIVATE TestMain cet-config)
+target_link_libraries(ConfigTest PRIVATE TestMain cet-config yaml-cpp::yaml-cpp)
 add_test(ConfigTest ConfigTest)
 
 add_custom_target(unittest ConfigTest

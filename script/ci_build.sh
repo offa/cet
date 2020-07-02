@@ -10,6 +10,7 @@ conan profile new default --detect
 if [[ "${CXX}" == clang* ]]
 then
     export CXXFLAGS="-stdlib=libc++"
+    conan profile update settings.compiler.libcxx=libc++ default
 else
     conan profile update settings.compiler.libcxx=libstdc++11 default
 fi

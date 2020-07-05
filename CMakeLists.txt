@@ -34,6 +34,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
+    message(STATUS "GCC < 9.0 requires '-lstdc++fs' for std::filesystem support")
+    add_link_options(-lstdc++fs)
+endif()
+
+
 include("${CMAKE_BINARY_DIR}/conan_paths.cmake" OPTIONAL)
 
 find_package(yaml-cpp REQUIRED)

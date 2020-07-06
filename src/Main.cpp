@@ -3,7 +3,7 @@
 int main(int argc, char* argv[])
 {
     argparse::ArgumentParser argParser{"cet"};
-    argParser.add_argument("config");
+    argParser.add_argument("config").default_value(std::string{"cet.yml"});
 
     try
     {

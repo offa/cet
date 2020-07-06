@@ -50,5 +50,5 @@ namespace cet
     };
 
     Config fromYaml(const std::string& yaml);
-
+    Config fromYamlFile(const std::string& fileName);
 }

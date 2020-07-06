@@ -32,10 +32,23 @@ namespace cet
                            [](const auto& value) { return value.template as<std::string>(); });
             return paths;
         }
+
+        Config fromYamlNode(const YAML::Node& node)
+        {
+            return Config{toPathList(node["files"]), toPathList(node["directories"])};
+        }
     }
+
     Config fromYaml(const std::string& yaml)
     {
         const YAML::Node node = YAML::Load(yaml);
-        return Config{toPathList(node["files"]), toPathList(node["directories"])};
+        return fromYamlNode(node);
     }
+
+    Config fromYamlFile(const std::string& fileName)
+    {
+        const YAML::Node node = YAML::LoadFile(fileName);
+        return fromYamlNode(node);
+    }
+
 }

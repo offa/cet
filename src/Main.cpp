@@ -32,6 +32,7 @@ int main(int argc, char* argv[])
     {
         std::cout << ex.what() << "\n";
         std::cout << argParser;
+        return 1;
     }
 
     return 0;

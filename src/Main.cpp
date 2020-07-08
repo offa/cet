@@ -17,21 +17,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <optional>
 #include <argparse/argparse.hpp>
+
+namespace
+{
+    std::optional<argparse::ArgumentParser> parseArguments(int argc, char* argv[])
+    {
+        argparse::ArgumentParser argParser{"cet"};
+        argParser.add_argument("config").default_value(std::string{"cet.yml"});
+
+        try
+        {
+            argParser.parse_args(argc, argv);
+        }
+        catch (const std::runtime_error& ex)
+        {
+            std::cout << ex.what() << "\n";
+            std::cout << argParser;
+            return {};
+        }
+        return argParser;
+    }
+}
 
 int main(int argc, char* argv[])
 {
-    argparse::ArgumentParser argParser{"cet"};
-    argParser.add_argument("config").default_value(std::string{"cet.yml"});
+    const auto args = parseArguments(argc, argv);
 
-    try
+    if (!args)
     {
-        argParser.parse_args(argc, argv);
-    }
-    catch (const std::runtime_error& ex)
-    {
-        std::cout << ex.what() << "\n";
-        std::cout << argParser;
         return 1;
     }
 

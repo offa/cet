@@ -17,25 +17,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "StreamReporter.h"
+#include <sstream>
+#include <catch2/catch.hpp>
 
-#include <string>
-
-namespace cet
+TEST_CASE("Passed test format", "[StreamReporterTest]")
 {
-    enum class Result
-    {
-        Pass,
-        Fail
-    };
+    std::ostringstream oss;
+    cet::StreamReporter reporter{oss};
+    reporter.printResult(cet::Result::Pass, "test case description");
 
-    class TestStep
-    {
-    public:
-        virtual ~TestStep() = default;
+    CHECK(oss.str() == "[PASS] test case description");
+}
 
-        virtual Result execute() const = 0;
-        virtual std::string describe() const = 0;
-    };
+TEST_CASE("Failed test format", "[StreamReporterTest]")
+{
+    std::ostringstream oss;
+    cet::StreamReporter reporter{oss};
+    reporter.printResult(cet::Result::Fail, "this failed");
 
+    CHECK(oss.str() == "[FAIL] this failed");
 }

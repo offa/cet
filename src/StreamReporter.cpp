@@ -17,25 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
-
-#include <string>
+#include "StreamReporter.h"
+#include <ostream>
 
 namespace cet
 {
-    enum class Result
+    StreamReporter::StreamReporter(std::ostream& stream)
+        : stream_(stream)
     {
-        Pass,
-        Fail
-    };
+    }
 
-    class TestStep
+    void StreamReporter::printResult(Result result, const std::string& description)
     {
-    public:
-        virtual ~TestStep() = default;
-
-        virtual Result execute() const = 0;
-        virtual std::string describe() const = 0;
-    };
-
+        stream_ << (result == Result::Pass ? "[PASS] " : "[FAIL] ") << description;
+    }
 }

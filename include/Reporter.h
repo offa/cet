@@ -19,23 +19,17 @@
 
 #pragma once
 
+#include "TestStep.h"
 #include <string>
 
 namespace cet
 {
-    enum class Result
-    {
-        Pass,
-        Fail
-    };
 
-    class TestStep
+    class Reporter
     {
     public:
-        virtual ~TestStep() = default;
+        virtual ~Reporter() = default;
 
-        virtual Result execute() const = 0;
-        virtual std::string describe() const = 0;
+        virtual void printResult(Result result, const std::string& description) = 0;
     };
-
 }

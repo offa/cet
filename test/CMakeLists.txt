@@ -13,9 +13,15 @@ add_executable(StepsTest FileSystemStepsTest.cpp StepExecutorTest.cpp)
 target_link_libraries(StepsTest PRIVATE TestMain)
 add_test(StepsTest StepsTest)
 
+add_executable(ReporterTest StreamReporterTest.cpp)
+target_link_libraries(ReporterTest PRIVATE TestMain cet-reporter)
+add_test(ReporterTest ReporterTest)
+
+
 
 add_custom_target(unittest ConfigTest
                     COMMAND StepsTest
+                    COMMAND ReporterTest
 
                     COMMENT "Running unittests\n\n"
                     VERBATIM

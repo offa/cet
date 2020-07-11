@@ -20,25 +20,41 @@
 #pragma once
 
 #include "TestStep.h"
+#include "Reporter.h"
 #include <algorithm>
+#include <memory>
 
 namespace cet
 {
+
     class StepExecutor
     {
     public:
+        explicit StepExecutor(std::unique_ptr<Reporter> reporter)
+            : reporter_(std::move(reporter))
+        {
+        }
+
         template <class C>
         Result executeSteps(const C& steps)
         {
             std::size_t failedSteps{0};
 
-            std::for_each(std::cbegin(steps), std::cend(steps), [&failedSteps](const auto& step) {
-                if (const auto& result = step.execute(); result != Result::Pass)
+            std::for_each(std::cbegin(steps), std::cend(steps), [this, &failedSteps](const auto& step) {
+                const auto result = step.execute();
+
+                if (result != Result::Pass)
                 {
                     ++failedSteps;
                 }
+
+                reporter_->printResult(result, step.describe());
             });
+
             return failedSteps == 0 ? Result::Pass : Result::Fail;
         }
+
+    private:
+        std::unique_ptr<Reporter> reporter_;
     };
 }

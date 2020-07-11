@@ -30,15 +30,50 @@ namespace
         MAKE_MOCK0(execute, cet::Result(), const override);
         MAKE_MOCK0(describe, std::string(), const override);
     };
+
+
+    class IgnoreReporter : public cet::Reporter
+    {
+        void printResult([[maybe_unused]] cet::Result result, [[maybe_unused]] const std::string& description) override
+        {
+        }
+    };
+
+
+    class ReporterMock : public cet::Reporter
+    {
+        MAKE_MOCK2(printResult, void(cet::Result, const std::string&), override);
+    };
+
+
+    class ReporterAdapter : public cet::Reporter
+    {
+    public:
+        explicit ReporterAdapter(std::shared_ptr<ReporterMock> mockImpl)
+            : impl(mockImpl)
+        {
+        }
+
+        void printResult(cet::Result result, const std::string& description) override
+        {
+            impl->printResult(result, description);
+        }
+
+    private:
+        std::shared_ptr<ReporterMock> impl;
+    };
+
 }
 
 TEST_CASE("Execute executes steps", "[StepExecutorTest]")
 {
     std::vector<StepMock> steps{2};
     REQUIRE_CALL(steps[0], execute()).RETURN(cet::Result::Pass);
+    REQUIRE_CALL(steps[0], describe()).RETURN("");
     REQUIRE_CALL(steps[1], execute()).RETURN(cet::Result::Pass);
+    REQUIRE_CALL(steps[1], describe()).RETURN("");
 
-    cet::StepExecutor se;
+    cet::StepExecutor se{std::make_unique<IgnoreReporter>()};
     se.executeSteps(steps);
 }
 
@@ -46,10 +81,13 @@ TEST_CASE("Execute returns successful if all steps are successful", "[StepExecut
 {
     std::vector<StepMock> steps{3};
     REQUIRE_CALL(steps[0], execute()).RETURN(cet::Result::Pass);
+    REQUIRE_CALL(steps[0], describe()).RETURN("");
     REQUIRE_CALL(steps[1], execute()).RETURN(cet::Result::Pass);
+    REQUIRE_CALL(steps[1], describe()).RETURN("");
     REQUIRE_CALL(steps[2], execute()).RETURN(cet::Result::Pass);
+    REQUIRE_CALL(steps[2], describe()).RETURN("");
 
-    cet::StepExecutor se;
+    cet::StepExecutor se{std::make_unique<IgnoreReporter>()};
     CHECK(se.executeSteps(steps) == cet::Result::Pass);
 }
 
@@ -57,9 +95,28 @@ TEST_CASE("Execute returns failure if one step failed", "[StepExecutorTest]")
 {
     std::vector<StepMock> steps{3};
     REQUIRE_CALL(steps[0], execute()).RETURN(cet::Result::Pass);
+    REQUIRE_CALL(steps[0], describe()).RETURN("");
     REQUIRE_CALL(steps[1], execute()).RETURN(cet::Result::Fail);
+    REQUIRE_CALL(steps[1], describe()).RETURN("");
     REQUIRE_CALL(steps[2], execute()).RETURN(cet::Result::Pass);
+    REQUIRE_CALL(steps[2], describe()).RETURN("");
 
-    cet::StepExecutor se;
+    cet::StepExecutor se{std::make_unique<IgnoreReporter>()};
     CHECK(se.executeSteps(steps) == cet::Result::Fail);
+}
+
+TEST_CASE("Execute prints steps with result", "[StepExecutorTest]")
+{
+    std::vector<StepMock> steps{2};
+    REQUIRE_CALL(steps[0], execute()).RETURN(cet::Result::Pass);
+    REQUIRE_CALL(steps[0], describe()).RETURN("abc");
+    REQUIRE_CALL(steps[1], execute()).RETURN(cet::Result::Fail);
+    REQUIRE_CALL(steps[1], describe()).RETURN("def");
+
+    auto reporter = std::make_shared<ReporterMock>();
+    REQUIRE_CALL(*reporter, printResult(cet::Result::Pass, "abc"));
+    REQUIRE_CALL(*reporter, printResult(cet::Result::Fail, "def"));
+
+    cet::StepExecutor se{std::make_unique<ReporterAdapter>(reporter)};
+    se.executeSteps(steps);
 }

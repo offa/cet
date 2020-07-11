@@ -19,23 +19,20 @@
 
 #pragma once
 
-#include <string>
+#include "Reporter.h"
+#include <iosfwd>
 
 namespace cet
 {
-    enum class Result
-    {
-        Pass,
-        Fail
-    };
 
-    class TestStep
+    class StreamReporter : public Reporter
     {
     public:
-        virtual ~TestStep() = default;
+        explicit StreamReporter(std::ostream& stream);
 
-        virtual Result execute() const = 0;
-        virtual std::string describe() const = 0;
+        void printResult(Result result, const std::string& description) override;
+
+    private:
+        std::ostream& stream_;
     };
-
 }

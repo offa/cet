@@ -53,11 +53,47 @@ namespace cet
     };
 
 
-    std::vector<FileStep> fromPaths(const std::vector<std::filesystem::path>& paths)
+    std::vector<FileStep> fileStepsFromPaths(const std::vector<std::filesystem::path>& paths)
     {
         std::vector<FileStep> result;
         result.reserve(paths.size());
         std::transform(paths.cbegin(), paths.cend(), std::back_inserter(result), [](const auto& p) { return FileStep{p}; });
+        return result;
+    }
+
+
+    class DirectoryStep : public TestStep
+    {
+    public:
+        explicit DirectoryStep(std::filesystem::path file)
+            : file_(file)
+        {
+        }
+
+        Result execute() const override
+        {
+            if (std::filesystem::is_directory(file_))
+            {
+                return Result::Pass;
+            }
+            return Result::Fail;
+        }
+
+        std::string describe() const override
+        {
+            return "Directory exists: " + file_.string();
+        }
+
+    private:
+        std::filesystem::path file_;
+    };
+
+
+    std::vector<DirectoryStep> directoryStepsFromPaths(const std::vector<std::filesystem::path>& paths)
+    {
+        std::vector<DirectoryStep> result;
+        result.reserve(paths.size());
+        std::transform(paths.cbegin(), paths.cend(), std::back_inserter(result), [](const auto& p) { return DirectoryStep{p}; });
         return result;
     }
 

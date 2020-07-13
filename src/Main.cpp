@@ -44,9 +44,9 @@ namespace
         return argParser;
     }
 
-    constexpr int getExitCode(cet::Result result)
+    constexpr int getExitCode(cet::Result resultA, cet::Result resultB)
     {
-        return result == cet::Result::Pass ? 0 : 1;
+        return (resultA == cet::Result::Pass) && (resultB == cet::Result::Pass) ? 0 : 1;
     }
 }
 
@@ -60,10 +60,12 @@ int main(int argc, char* argv[])
     }
 
     const auto config = cet::fromYamlFile(args->get<std::string>("config"));
-    const auto fileSteps = cet::fromPaths(config.getFiles());
+    const auto fileSteps = cet::fileStepsFromPaths(config.getFiles());
+    const auto directorySteps = cet::directoryStepsFromPaths(config.getDirectories());
 
     cet::StepExecutor executor{std::make_unique<cet::StreamReporter>(std::cout)};
-    const auto result = executor.executeSteps(fileSteps);
+    const auto filesResult = executor.executeSteps(fileSteps);
+    const auto directoriesResult = executor.executeSteps(directorySteps);
 
-    return getExitCode(result);
+    return getExitCode(filesResult, directoriesResult);
 }

@@ -17,6 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "Config.h"
+#include "FileSystemSteps.h"
+#include "StepExecutor.h"
+#include "StreamReporter.h"
 #include <optional>
 #include <argparse/argparse.hpp>
 
@@ -42,12 +46,18 @@ namespace
 
 int main(int argc, char* argv[])
 {
-    const auto args = parseArguments(argc, argv);
+    auto args = parseArguments(argc, argv);
 
     if (!args)
     {
         return 1;
     }
+
+    const auto config = cet::fromYamlFile(args->get<std::string>("config"));
+    const auto fileSteps = cet::fromPaths(config.getFiles());
+
+    cet::StepExecutor executor{std::make_unique<cet::StreamReporter>(std::cout)};
+    executor.executeSteps(fileSteps);
 
     return 0;
 }

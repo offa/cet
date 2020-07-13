@@ -22,6 +22,7 @@
 #include "TestStep.h"
 #include "Reporter.h"
 #include <algorithm>
+#include <type_traits>
 #include <memory>
 
 namespace cet
@@ -35,7 +36,7 @@ namespace cet
         {
         }
 
-        template <class C>
+        template <class C, std::enable_if_t<std::is_base_of_v<TestStep, typename C::value_type>, int> = 0>
         Result executeSteps(const C& steps)
         {
             std::size_t failedSteps{0};

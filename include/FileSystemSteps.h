@@ -21,6 +21,8 @@
 
 #include "TestStep.h"
 #include <filesystem>
+#include <vector>
+#include <algorithm>
 
 namespace cet
 {
@@ -49,5 +51,14 @@ namespace cet
     private:
         std::filesystem::path file_;
     };
+
+
+    std::vector<FileStep> fromPaths(const std::vector<std::filesystem::path>& paths)
+    {
+        std::vector<FileStep> result;
+        result.reserve(paths.size());
+        std::transform(paths.cbegin(), paths.cend(), std::back_inserter(result), [](const auto& p) { return FileStep{p}; });
+        return result;
+    }
 
 }

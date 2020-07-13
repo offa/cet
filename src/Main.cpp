@@ -37,10 +37,16 @@ namespace
         }
         catch (const std::runtime_error& ex)
         {
-            std::cout << ex.what() << "\n" << argParser;
+            std::cout << ex.what() << "\n"
+                      << argParser;
             return {};
         }
         return argParser;
+    }
+
+    constexpr int getExitCode(cet::Result result)
+    {
+        return result == cet::Result::Pass ? 0 : 1;
     }
 }
 
@@ -57,7 +63,7 @@ int main(int argc, char* argv[])
     const auto fileSteps = cet::fromPaths(config.getFiles());
 
     cet::StepExecutor executor{std::make_unique<cet::StreamReporter>(std::cout)};
-    executor.executeSteps(fileSteps);
+    const auto result = executor.executeSteps(fileSteps);
 
-    return 0;
+    return getExitCode(result);
 }

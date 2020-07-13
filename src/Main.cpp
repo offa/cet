@@ -44,9 +44,10 @@ namespace
         return argParser;
     }
 
-    constexpr int getExitCode(cet::Result resultA, cet::Result resultB)
+    template<class... Results>
+    constexpr int getExitCode(Results... results)
     {
-        return (resultA == cet::Result::Pass) && (resultB == cet::Result::Pass) ? 0 : 1;
+        return ((results == cet::Result::Pass) && ...) ? 0 : 1;
     }
 }
 

@@ -29,6 +29,6 @@ namespace cet
 
     void StreamReporter::printResult(Result result, const std::string& description)
     {
-        stream_ << (result == Result::Pass ? "[PASS] " : "[FAIL] ") << description;
+        stream_ << (result == Result::Pass ? "[PASS] " : "[FAIL] ") << description << "\n";
     }
 }

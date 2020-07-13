@@ -27,7 +27,7 @@ TEST_CASE("Passed test format", "[StreamReporterTest]")
     cet::StreamReporter reporter{oss};
     reporter.printResult(cet::Result::Pass, "test case description");
 
-    CHECK(oss.str() == "[PASS] test case description");
+    CHECK(oss.str() == "[PASS] test case description\n");
 }
 
 TEST_CASE("Failed test format", "[StreamReporterTest]")
@@ -36,5 +36,5 @@ TEST_CASE("Failed test format", "[StreamReporterTest]")
     cet::StreamReporter reporter{oss};
     reporter.printResult(cet::Result::Fail, "this failed");
 
-    CHECK(oss.str() == "[FAIL] this failed");
+    CHECK(oss.str() == "[FAIL] this failed\n");
 }

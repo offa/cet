@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "Version.h"
 #include "Config.h"
 #include "FileSystemSteps.h"
 #include "StepExecutor.h"
@@ -30,6 +31,7 @@ namespace
     {
         argparse::ArgumentParser argParser{"cet"};
         argParser.add_argument("config").default_value(std::string{"cet.yml"});
+        argParser.add_argument("--version").default_value(false).implicit_value(true);
 
         try
         {
@@ -44,7 +46,7 @@ namespace
         return argParser;
     }
 
-    template<class... Results>
+    template <class... Results>
     constexpr int getExitCode(Results... results)
     {
         return ((results == cet::Result::Pass) && ...) ? 0 : 1;
@@ -58,6 +60,12 @@ int main(int argc, char* argv[])
     if (!args)
     {
         return 1;
+    }
+
+    if (args->get<bool>("--version"))
+    {
+        std::cout << "cet v" << cet::version() << "\n";
+        return 0;
     }
 
     const auto config = cet::fromYamlFile(args->get<std::string>("config"));

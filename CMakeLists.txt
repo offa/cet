@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.12.0)
 
-
 project(cet VERSION 0.0.1)
 message(STATUS "~~~ ${PROJECT_NAME} v${PROJECT_VERSION} ~~~")
 
@@ -42,6 +41,7 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_COMPILER_VERSION VE
     link_libraries(c++fs)
 endif()
 
+include(Template)
 
 include("${CMAKE_BINARY_DIR}/conan_paths.cmake" OPTIONAL)
 

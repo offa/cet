@@ -8,5 +8,6 @@ target_link_libraries(cet
     PRIVATE
         cet-config
         cet-reporter
+        cet-version
         argparse::argparse
         )

@@ -33,20 +33,3 @@ TEST_CASE("Env step tests existence of env", "[EnvStepTest]")
     setenv("UNIT_TEST_ENV_STEP_VAR_1", "test", 1);
     CHECK(ex.execute() == cet::Result::Pass);
 }
-
-TEST_CASE("Env steps from names", "[EnvStepTest]")
-{
-    using namespace Catch::Matchers;
-    const std::vector<std::string> names{"ENV_1", "ENV_2"};
-    const auto steps = cet::envStepsFromNames(names);
-
-    CHECK(steps.size() == 2);
-    CHECK_THAT(steps[0].describe(), Contains("ENV_1"));
-    CHECK_THAT(steps[1].describe(), Contains("ENV_2"));
-}
-
-TEST_CASE("Env steps from names returns empty if no names", "[EnvStepTest]")
-{
-    const auto steps = cet::envStepsFromNames({});
-    CHECK(steps.size() == 0);
-}

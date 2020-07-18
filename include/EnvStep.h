@@ -51,12 +51,4 @@ namespace cet
     private:
         std::string name_;
     };
-
-    inline std::vector<EnvStep> envStepsFromNames(const std::vector<std::string>& names)
-    {
-        std::vector<EnvStep> result;
-        result.reserve(names.size());
-        std::transform(names.cbegin(), names.cend(), std::back_inserter(result), [](const auto& e) { return EnvStep{e}; });
-        return result;
-    }
 }

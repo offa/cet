@@ -53,15 +53,6 @@ namespace cet
     };
 
 
-    inline std::vector<FileStep> fileStepsFromPaths(const std::vector<std::filesystem::path>& paths)
-    {
-        std::vector<FileStep> result;
-        result.reserve(paths.size());
-        std::transform(paths.cbegin(), paths.cend(), std::back_inserter(result), [](const auto& p) { return FileStep{p}; });
-        return result;
-    }
-
-
     class DirectoryStep : public TestStep
     {
     public:
@@ -87,14 +78,5 @@ namespace cet
     private:
         std::filesystem::path file_;
     };
-
-
-    inline std::vector<DirectoryStep> directoryStepsFromPaths(const std::vector<std::filesystem::path>& paths)
-    {
-        std::vector<DirectoryStep> result;
-        result.reserve(paths.size());
-        std::transform(paths.cbegin(), paths.cend(), std::back_inserter(result), [](const auto& p) { return DirectoryStep{p}; });
-        return result;
-    }
 
 }

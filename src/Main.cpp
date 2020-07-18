@@ -20,6 +20,7 @@
 #include "Version.h"
 #include "Config.h"
 #include "FileSystemSteps.h"
+#include "EnvStep.h"
 #include "StepExecutor.h"
 #include "StreamReporter.h"
 #include <optional>
@@ -71,10 +72,12 @@ int main(int argc, char* argv[])
     const auto config = cet::fromYamlFile(args->get<std::string>("config"));
     const auto fileSteps = cet::fileStepsFromPaths(config.getFiles());
     const auto directorySteps = cet::directoryStepsFromPaths(config.getDirectories());
+    const auto envSteps = cet::envStepsFromNames(config.getEnvs());
 
     cet::StepExecutor executor{std::make_unique<cet::StreamReporter>(std::cout)};
     const auto filesResult = executor.executeSteps(fileSteps);
     const auto directoriesResult = executor.executeSteps(directorySteps);
+    const auto envResult = executor.executeSteps(envSteps);
 
-    return getExitCode(filesResult, directoriesResult);
+    return getExitCode(filesResult, directoriesResult, envResult);
 }

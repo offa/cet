@@ -20,13 +20,13 @@
 #include "FileSystemSteps.h"
 #include <catch2/catch.hpp>
 
-TEST_CASE("File step describes step", "[FileSystemStepsTests]")
+TEST_CASE("File step describes step", "[FileSystemStepsTest]")
 {
     cet::FileStep fs{"/tmp/x"};
     CHECK(fs.describe() == "File exists: /tmp/x");
 }
 
-TEST_CASE("File steps from paths", "[FileSystemStepsTests]")
+TEST_CASE("File steps from paths", "[FileSystemStepsTest]")
 {
     using namespace Catch::Matchers;
     const std::vector<std::filesystem::path> paths{"a.txt", "b.txt", "c.txt"};
@@ -38,19 +38,19 @@ TEST_CASE("File steps from paths", "[FileSystemStepsTests]")
     CHECK_THAT(steps[2].describe(), Contains("c.txt"));
 }
 
-TEST_CASE("File steps from paths returns empty if no paths", "[FileSystemStepsTests]")
+TEST_CASE("File steps from paths returns empty if no paths", "[FileSystemStepsTest]")
 {
     const auto steps = cet::fileStepsFromPaths({});
     CHECK(steps.size() == 0);
 }
 
-TEST_CASE("Directory step describes step", "[FileSystemStepsTests]")
+TEST_CASE("Directory step describes step", "[FileSystemStepsTest]")
 {
     cet::DirectoryStep ds{"/tmp/y/z"};
     CHECK(ds.describe() == "Directory exists: /tmp/y/z");
 }
 
-TEST_CASE("Directory steps from paths", "[FileSystemStepsTests]")
+TEST_CASE("Directory steps from paths", "[FileSystemStepsTest]")
 {
     using namespace Catch::Matchers;
     const std::vector<std::filesystem::path> paths{"/a/b/c", "./x/", "dir_z"};
@@ -62,7 +62,7 @@ TEST_CASE("Directory steps from paths", "[FileSystemStepsTests]")
     CHECK_THAT(steps[2].describe(), Contains("dir_z"));
 }
 
-TEST_CASE("Directory steps from paths returns empty if no paths", "[FileSystemStepsTests]")
+TEST_CASE("Directory steps from paths returns empty if no paths", "[FileSystemStepsTest]")
 {
     const auto steps = cet::directoryStepsFromPaths({});
     CHECK(steps.size() == 0);

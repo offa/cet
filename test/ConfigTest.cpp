@@ -59,6 +59,24 @@ TEST_CASE("Parse config directories returns empty if no entries", "[ConfigTest]"
     CHECK(dirs.size() == 0);
 }
 
+TEST_CASE("Parse config envs entries", "[ConfigTest]")
+{
+    const auto config = cet::fromYaml("envs:\n - AAA\n - BBB_BBB\n");
+    const auto envs = config.getEnvs();
+
+    CHECK(envs.size() == 2);
+    CHECK_THAT(envs[0], Equals("AAA"));
+    CHECK_THAT(envs[1], Equals("BBB_BBB"));
+}
+
+TEST_CASE("Parse config envs returns empty if no entries", "[ConfigTest]")
+{
+    const auto config = cet::fromYaml("# Nothing");
+    const auto envs = config.getEnvs();
+
+    CHECK(envs.size() == 0);
+}
+
 TEST_CASE("Parse config with multiple types", "[ConfigTest]")
 {
     const auto config = cet::fromYaml("files:\n - file1\n - file2\n - file3\n"

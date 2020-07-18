@@ -19,42 +19,44 @@
 
 #pragma once
 
+#include "TestStep.h"
 #include <vector>
-#include <filesystem>
+#include <algorithm>
+#include <cstdlib>
 
 namespace cet
 {
-    class Config
+    class EnvStep : public TestStep
     {
     public:
-        using PathList = std::vector<std::filesystem::path>;
-
-        Config(const PathList& files, const PathList& directories, const std::vector<std::string>& envs)
-            : files_(files), directories_(directories), envs_(envs)
+        explicit EnvStep(const std::string& name)
+            : name_(name)
         {
         }
 
-        const PathList& getFiles() const
+        Result execute() const override
         {
-            return files_;
+            if (std::getenv(name_.c_str()))
+            {
+                return Result::Pass;
+            }
+            return Result::Fail;
         }
 
-        const PathList& getDirectories() const
+        std::string describe() const override
         {
-            return directories_;
-        }
-
-        const std::vector<std::string> getEnvs() const
-        {
-            return envs_;
-        }
+            return "Env exists: " + name_;
+        };
 
     private:
-        PathList files_;
-        PathList directories_;
-        std::vector<std::string> envs_;
+        std::string name_;
     };
 
-    Config fromYaml(const std::string& yaml);
-    Config fromYamlFile(const std::string& fileName);
+    std::vector<EnvStep> envStepsFromNames(const std::vector<std::string>& names)
+    {
+        std::vector<EnvStep> result;
+        result.reserve(names.size());
+        std::transform(names.cbegin(), names.cend(), std::back_inserter(result), [](const auto& e) { return EnvStep{e}; });
+        return result;
+    }
 }

@@ -33,9 +33,17 @@ namespace cet
             return paths;
         }
 
+        std::vector<std::string> toStringList(const YAML::Node& node)
+        {
+            std::vector<std::string> strings;
+            std::transform(node.begin(), node.end(), std::back_inserter(strings),
+                           [](const auto& value) { return value.template as<std::string>(); });
+            return strings;
+        }
+
         Config fromYamlNode(const YAML::Node& node)
         {
-            return Config{toPathList(node["files"]), toPathList(node["directories"])};
+            return Config{toPathList(node["files"]), toPathList(node["directories"]), toStringList(node["envs"])};
         }
     }
 

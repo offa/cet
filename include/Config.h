@@ -29,25 +29,11 @@ namespace cet
     public:
         using PathList = std::vector<std::filesystem::path>;
 
-        Config(const PathList& files, const PathList& directories, const std::vector<std::string>& envs)
-            : files_(files), directories_(directories), envs_(envs)
-        {
-        }
+        Config(const PathList& files, const PathList& directories, const std::vector<std::string>& envs);
 
-        const PathList& getFiles() const
-        {
-            return files_;
-        }
-
-        const PathList& getDirectories() const
-        {
-            return directories_;
-        }
-
-        const std::vector<std::string> getEnvs() const
-        {
-            return envs_;
-        }
+        const PathList& getFiles() const;
+        const PathList& getDirectories() const;
+        const std::vector<std::string> getEnvs() const;
 
     private:
         PathList files_;

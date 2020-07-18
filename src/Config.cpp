@@ -47,6 +47,27 @@ namespace cet
         }
     }
 
+    Config::Config(const PathList& files, const PathList& directories, const std::vector<std::string>& envs)
+        : files_(files), directories_(directories), envs_(envs)
+    {
+    }
+
+    const Config::PathList& Config::getFiles() const
+    {
+        return files_;
+    }
+
+    const Config::PathList& Config::getDirectories() const
+    {
+        return directories_;
+    }
+
+    const std::vector<std::string> Config::getEnvs() const
+    {
+        return envs_;
+    }
+
+
     Config fromYaml(const std::string& yaml)
     {
         const YAML::Node node = YAML::Load(yaml);

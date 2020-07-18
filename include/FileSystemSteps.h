@@ -53,7 +53,7 @@ namespace cet
     };
 
 
-    std::vector<FileStep> fileStepsFromPaths(const std::vector<std::filesystem::path>& paths)
+    inline std::vector<FileStep> fileStepsFromPaths(const std::vector<std::filesystem::path>& paths)
     {
         std::vector<FileStep> result;
         result.reserve(paths.size());
@@ -89,7 +89,7 @@ namespace cet
     };
 
 
-    std::vector<DirectoryStep> directoryStepsFromPaths(const std::vector<std::filesystem::path>& paths)
+    inline std::vector<DirectoryStep> directoryStepsFromPaths(const std::vector<std::filesystem::path>& paths)
     {
         std::vector<DirectoryStep> result;
         result.reserve(paths.size());

@@ -25,44 +25,37 @@ namespace cet
 {
     namespace
     {
-        Config::PathList toPathList(const YAML::Node& node)
+        template<class T>
+        std::vector<T> toSteps(const YAML::Node& node)
         {
-            Config::PathList paths;
-            std::transform(node.begin(), node.end(), std::back_inserter(paths),
-                           [](const auto& value) { return value.template as<std::string>(); });
-            return paths;
-        }
-
-        std::vector<std::string> toStringList(const YAML::Node& node)
-        {
-            std::vector<std::string> strings;
+            std::vector<T> strings;
             std::transform(node.begin(), node.end(), std::back_inserter(strings),
-                           [](const auto& value) { return value.template as<std::string>(); });
+                           [](const auto& value) { return T{value.template as<std::string>()}; });
             return strings;
         }
 
         Config fromYamlNode(const YAML::Node& node)
         {
-            return Config{toPathList(node["files"]), toPathList(node["directories"]), toStringList(node["envs"])};
+            return Config{toSteps<FileStep>(node["files"]), toSteps<DirectoryStep>(node["directories"]), toSteps<EnvStep>(node["envs"])};
         }
     }
 
-    Config::Config(const PathList& files, const PathList& directories, const std::vector<std::string>& envs)
+    Config::Config(const std::vector<FileStep>& files, const std::vector<DirectoryStep>& directories, const std::vector<EnvStep>& envs)
         : files_(files), directories_(directories), envs_(envs)
     {
     }
 
-    const Config::PathList& Config::getFiles() const
+    const std::vector<FileStep>& Config::getFiles() const
     {
         return files_;
     }
 
-    const Config::PathList& Config::getDirectories() const
+    const std::vector<DirectoryStep>& Config::getDirectories() const
     {
         return directories_;
     }
 
-    const std::vector<std::string> Config::getEnvs() const
+    const std::vector<EnvStep> Config::getEnvs() const
     {
         return envs_;
     }

@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include "FileSystemSteps.h"
+#include "EnvStep.h"
 #include <vector>
 #include <filesystem>
 
@@ -29,16 +31,16 @@ namespace cet
     public:
         using PathList = std::vector<std::filesystem::path>;
 
-        Config(const PathList& files, const PathList& directories, const std::vector<std::string>& envs);
+        Config(const std::vector<FileStep>& files, const std::vector<DirectoryStep>& directories, const std::vector<EnvStep>& envs);
 
-        const PathList& getFiles() const;
-        const PathList& getDirectories() const;
-        const std::vector<std::string> getEnvs() const;
+        const std::vector<FileStep>& getFiles() const;
+        const std::vector<DirectoryStep>& getDirectories() const;
+        const std::vector<EnvStep> getEnvs() const;
 
     private:
-        PathList files_;
-        PathList directories_;
-        std::vector<std::string> envs_;
+        std::vector<FileStep> files_;
+        std::vector<DirectoryStep> directories_;
+        std::vector<EnvStep> envs_;
     };
 
     Config fromYaml(const std::string& yaml);

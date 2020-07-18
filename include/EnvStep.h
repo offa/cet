@@ -52,7 +52,7 @@ namespace cet
         std::string name_;
     };
 
-    std::vector<EnvStep> envStepsFromNames(const std::vector<std::string>& names)
+    inline std::vector<EnvStep> envStepsFromNames(const std::vector<std::string>& names)
     {
         std::vector<EnvStep> result;
         result.reserve(names.size());

@@ -28,8 +28,8 @@ TEST_CASE("Parse config files entries", "[ConfigTest]")
     const auto files = config.getFiles();
 
     CHECK(files.size() == 2);
-    CHECK_THAT(files[0], Equals("/tmp/file1"));
-    CHECK_THAT(files[1], Equals("/tmp/dir/file2"));
+    CHECK_THAT(files[0].describe(), Contains("/tmp/file1"));
+    CHECK_THAT(files[1].describe(), Contains("/tmp/dir/file2"));
 }
 
 TEST_CASE("Parse config files returns empty if no entries", "[ConfigTest]")
@@ -46,9 +46,9 @@ TEST_CASE("Parse config directories entries", "[ConfigTest]")
     const auto dirs = config.getDirectories();
 
     CHECK(dirs.size() == 3);
-    CHECK_THAT(dirs[0], Equals("/tmp/dir/x/"));
-    CHECK_THAT(dirs[1], Equals("/tmp/dir2/y"));
-    CHECK_THAT(dirs[2], Equals("/tmp/dir_3/zzzz"));
+    CHECK_THAT(dirs[0].describe(), Contains("/tmp/dir/x/"));
+    CHECK_THAT(dirs[1].describe(), Contains("/tmp/dir2/y"));
+    CHECK_THAT(dirs[2].describe(), Contains("/tmp/dir_3/zzzz"));
 }
 
 TEST_CASE("Parse config directories returns empty if no entries", "[ConfigTest]")
@@ -65,8 +65,8 @@ TEST_CASE("Parse config envs entries", "[ConfigTest]")
     const auto envs = config.getEnvs();
 
     CHECK(envs.size() == 2);
-    CHECK_THAT(envs[0], Equals("AAA"));
-    CHECK_THAT(envs[1], Equals("BBB_BBB"));
+    CHECK_THAT(envs[0].describe(), Contains("AAA"));
+    CHECK_THAT(envs[1].describe(), Contains("BBB_BBB"));
 }
 
 TEST_CASE("Parse config envs returns empty if no entries", "[ConfigTest]")
@@ -85,17 +85,17 @@ TEST_CASE("Parse config with multiple types", "[ConfigTest]")
 
     const auto files = config.getFiles();
     CHECK(files.size() == 3);
-    CHECK_THAT(files[0], Equals("file1"));
-    CHECK_THAT(files[1], Equals("file2"));
-    CHECK_THAT(files[2], Equals("file3"));
+    CHECK_THAT(files[0].describe(), Contains("file1"));
+    CHECK_THAT(files[1].describe(), Contains("file2"));
+    CHECK_THAT(files[2].describe(), Contains("file3"));
 
     const auto dirs = config.getDirectories();
     CHECK(dirs.size() == 2);
-    CHECK_THAT(dirs[0], Equals("dir1"));
-    CHECK_THAT(dirs[1], Equals("dir2"));
+    CHECK_THAT(dirs[0].describe(), Contains("dir1"));
+    CHECK_THAT(dirs[1].describe(), Contains("dir2"));
 
     const auto envs = config.getEnvs();
     CHECK(envs.size() == 2);
-    CHECK_THAT(envs[0], Equals("ENV_1"));
-    CHECK_THAT(envs[1], Equals("ENV_2"));
+    CHECK_THAT(envs[0].describe(), Contains("ENV_1"));
+    CHECK_THAT(envs[1].describe(), Contains("ENV_2"));
 }

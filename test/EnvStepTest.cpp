@@ -20,10 +20,27 @@
 #include "EnvStep.h"
 #include <catch2/catch.hpp>
 
+TEST_CASE("Env step without value", "[EnvStepTest]")
+{
+    cet::EnvStep es{"ENV_VAR_0"};
+    CHECK(es.getName() == "ENV_VAR_0");
+    CHECK(es.getValue().has_value() == false);
+}
+
+TEST_CASE("Env step with value", "[EnvStepTest]")
+{
+    cet::EnvStep es{"ENV_VAR_0", "env_value_0"};
+    CHECK(es.getName() == "ENV_VAR_0");
+    CHECK(*es.getValue() == "env_value_0");
+}
+
 TEST_CASE("Env step describes step", "[EnvStepTest]")
 {
-    cet::EnvStep es{"ENV_VAR_1"};
-    CHECK(es.describe() == "Env exists: ENV_VAR_1");
+    cet::EnvStep noValue{"ENV_VAR_1"};
+    CHECK(noValue.describe() == "Env exists: ENV_VAR_1");
+
+    cet::EnvStep withValue{"ENV_VAR_2", "value2"};
+    CHECK(withValue.describe() == "Env exists: ENV_VAR_2 = 'value2'");
 }
 
 TEST_CASE("Env step tests existence of env", "[EnvStepTest]")
@@ -31,5 +48,15 @@ TEST_CASE("Env step tests existence of env", "[EnvStepTest]")
     cet::EnvStep ex{"UNIT_TEST_ENV_STEP_VAR_1"};
     CHECK(ex.execute() == cet::Result::Fail);
     setenv("UNIT_TEST_ENV_STEP_VAR_1", "test", 1);
+    CHECK(ex.execute() == cet::Result::Pass);
+}
+
+TEST_CASE("Env step with value tests existence of env with value", "[EnvStepTest]")
+{
+    setenv("UNIT_TEST_ENV_STEP_VAR_2", "<wrong value>", 1);
+
+    cet::EnvStep ex{"UNIT_TEST_ENV_STEP_VAR_2", "correct value"};
+    CHECK(ex.execute() == cet::Result::Fail);
+    setenv("UNIT_TEST_ENV_STEP_VAR_2", "correct value", 1);
     CHECK(ex.execute() == cet::Result::Pass);
 }

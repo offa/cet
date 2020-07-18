@@ -20,8 +20,7 @@
 #pragma once
 
 #include "TestStep.h"
-#include <vector>
-#include <algorithm>
+#include <optional>
 #include <cstdlib>
 
 namespace cet
@@ -29,15 +28,19 @@ namespace cet
     class EnvStep : public TestStep
     {
     public:
-        explicit EnvStep(const std::string& name)
-            : name_(name)
+        explicit EnvStep(const std::string& name, std::optional<std::string> value = {})
+            : name_(name), value_(value)
         {
         }
 
         Result execute() const override
         {
-            if (std::getenv(name_.c_str()))
+            if (const auto envValue = std::getenv(name_.c_str()); envValue != nullptr)
             {
+                if (value_)
+                {
+                    return envValue == *value_ ? Result::Pass : Result::Fail;
+                }
                 return Result::Pass;
             }
             return Result::Fail;
@@ -45,10 +48,27 @@ namespace cet
 
         std::string describe() const override
         {
-            return "Env exists: " + name_;
+            std::string msg = "Env exists: " + name_;
+
+            if (value_)
+            {
+                msg += " = '" + value_.value() + "'";
+            }
+            return msg;
         };
+
+        std::string getName() const
+        {
+            return name_;
+        }
+
+        std::optional<std::string> getValue() const
+        {
+            return value_;
+        }
 
     private:
         std::string name_;
+        std::optional<std::string> value_;
     };
 }

@@ -80,7 +80,8 @@ TEST_CASE("Parse config envs returns empty if no entries", "[ConfigTest]")
 TEST_CASE("Parse config with multiple types", "[ConfigTest]")
 {
     const auto config = cet::fromYaml("files:\n - file1\n - file2\n - file3\n"
-                                      "directories:\n - dir1\n - dir2\n");
+                                      "directories:\n - dir1\n - dir2\n"
+                                      "envs:\n - ENV_1\n - ENV_2");
 
     const auto files = config.getFiles();
     CHECK(files.size() == 3);
@@ -92,4 +93,9 @@ TEST_CASE("Parse config with multiple types", "[ConfigTest]")
     CHECK(dirs.size() == 2);
     CHECK_THAT(dirs[0], Equals("dir1"));
     CHECK_THAT(dirs[1], Equals("dir2"));
+
+    const auto envs = config.getEnvs();
+    CHECK(envs.size() == 2);
+    CHECK_THAT(envs[0], Equals("ENV_1"));
+    CHECK_THAT(envs[1], Equals("ENV_2"));
 }

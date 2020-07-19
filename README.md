@@ -18,12 +18,16 @@ Existence of files or directories is configured by `cet.yml`:
 
 ```yml
 files:
-  - /bin/gcc
-  - /bin/g++
-  - /tmp/example/file1.conf
+ - /bin/gcc
+ - /bin/g++
+ - /tmp/example/file1.conf
 
 directories:
-  - /usr/lib/gcc
-  - /usr/lib/clang
-  - /tmp/dir/example
+ - /usr/lib/gcc
+ - /usr/lib/clang
+ - /tmp/dir/example
+
+envs:
+ - CC
+ - CXX
 ```

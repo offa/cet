@@ -65,8 +65,8 @@ TEST_CASE("Parse config envs entries", "[ConfigTest]")
     const auto envs = config.getEnvs();
 
     CHECK(envs.size() == 2);
-    CHECK_THAT(envs[0].describe(), Contains("AAA"));
-    CHECK_THAT(envs[1].describe(), Contains("BBB_BBB"));
+    CHECK(envs[0].getName() == "AAA");
+    CHECK(envs[1].getName() == "BBB_BBB");
 }
 
 TEST_CASE("Parse config envs returns empty if no entries", "[ConfigTest]")
@@ -96,6 +96,6 @@ TEST_CASE("Parse config with multiple types", "[ConfigTest]")
 
     const auto envs = config.getEnvs();
     CHECK(envs.size() == 2);
-    CHECK_THAT(envs[0].describe(), Contains("ENV_1"));
-    CHECK_THAT(envs[1].describe(), Contains("ENV_2"));
+    CHECK(envs[0].getName() == "ENV_1");
+    CHECK(envs[1].getName() == "ENV_2");
 }

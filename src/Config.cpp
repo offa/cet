@@ -25,7 +25,7 @@ namespace cet
 {
     namespace
     {
-        template<class T>
+        template <class T>
         std::vector<T> toSteps(const YAML::Node& node)
         {
             std::vector<T> strings;
@@ -34,9 +34,34 @@ namespace cet
             return strings;
         }
 
+        std::tuple<std::string, std::optional<std::string>> split(const std::string& s)
+        {
+            const auto delimiter = std::find(s.cbegin(), s.cend(), '=');
+
+            if (delimiter != s.cend())
+            {
+                return {std::string{s.cbegin(), delimiter}, std::string{std::next(delimiter), s.cend()}};
+            }
+            return {s, {}};
+        }
+
+        template <class T>
+        std::vector<T> keyValueToSteps(const YAML::Node& node)
+        {
+            std::vector<T> strings;
+            std::transform(node.begin(), node.end(), std::back_inserter(strings),
+                           [](const auto& element) {
+                               const auto [name, value] = split(element.template as<std::string>());
+                               return T{name, value};
+                           });
+            return strings;
+        }
+
         Config fromYamlNode(const YAML::Node& node)
         {
-            return Config{toSteps<FileStep>(node["files"]), toSteps<DirectoryStep>(node["directories"]), toSteps<EnvStep>(node["envs"])};
+            return Config{toSteps<FileStep>(node["files"]),
+                          toSteps<DirectoryStep>(node["directories"]),
+                          keyValueToSteps<EnvStep>(node["envs"])};
         }
     }
 

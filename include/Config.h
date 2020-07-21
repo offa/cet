@@ -29,8 +29,6 @@ namespace cet
     class Config
     {
     public:
-        using PathList = std::vector<std::filesystem::path>;
-
         Config(const std::vector<FileStep>& files, const std::vector<DirectoryStep>& directories, const std::vector<EnvStep>& envs);
 
         const std::vector<FileStep>& getFiles() const;

@@ -28,13 +28,13 @@ namespace cet
         template <class T>
         std::vector<T> toSteps(const YAML::Node& node)
         {
-            std::vector<T> strings;
-            std::transform(node.begin(), node.end(), std::back_inserter(strings),
+            std::vector<T> elements;
+            std::transform(node.begin(), node.end(), std::back_inserter(elements),
                            [](const auto& value) { return T{value.template as<std::string>()}; });
-            return strings;
+            return elements;
         }
 
-        std::tuple<std::string, std::optional<std::string>> split(const std::string& s)
+        std::tuple<std::string, std::optional<std::string>> parseEntry(const std::string& s)
         {
             const auto delimiter = std::find(s.cbegin(), s.cend(), '=');
 
@@ -48,13 +48,13 @@ namespace cet
         template <class T>
         std::vector<T> keyValueToSteps(const YAML::Node& node)
         {
-            std::vector<T> strings;
-            std::transform(node.begin(), node.end(), std::back_inserter(strings),
+            std::vector<T> elements;
+            std::transform(node.begin(), node.end(), std::back_inserter(elements),
                            [](const auto& element) {
-                               const auto [name, value] = split(element.template as<std::string>());
+                               const auto [name, value] = parseEntry(element.template as<std::string>());
                                return T{name, value};
                            });
-            return strings;
+            return elements;
         }
 
         Config fromYamlNode(const YAML::Node& node)

@@ -51,8 +51,7 @@ namespace cet
             std::vector<T> elements;
             std::transform(node.begin(), node.end(), std::back_inserter(elements),
                            [](const auto& element) {
-                               const auto [name, value] = parseEntry(element.template as<std::string>());
-                               return T{name, value};
+                               return std::make_from_tuple<T>(parseEntry(element.template as<std::string>()));
                            });
             return elements;
         }

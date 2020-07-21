@@ -52,6 +52,12 @@ namespace
     {
         return ((results == cet::Result::Pass) && ...) ? 0 : 1;
     }
+
+    template <class... StepLists>
+    int execute(cet::StepExecutor& e, StepLists... stepLists)
+    {
+        return getExitCode((e.executeSteps(stepLists), ...));
+    }
 }
 
 int main(int argc, char* argv[])
@@ -72,9 +78,5 @@ int main(int argc, char* argv[])
     const auto config = cet::fromYamlFile(args->get<std::string>("config"));
 
     cet::StepExecutor executor{std::make_unique<cet::StreamReporter>(std::cout)};
-    const auto filesResult = executor.executeSteps(config.getFiles());
-    const auto directoriesResult = executor.executeSteps(config.getDirectories());
-    const auto envResult = executor.executeSteps(config.getEnvs());
-
-    return getExitCode(filesResult, directoriesResult, envResult);
+    return execute(executor, config.getFiles(), config.getDirectories(), config.getEnvs());
 }

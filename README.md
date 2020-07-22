@@ -30,5 +30,6 @@ directories:
 envs:
  - CC
  - CXX
- - ENV_WITH_VALUE=yes
+ - name: ENV_WITH_VALUE
+   value: yes
 ```

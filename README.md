@@ -31,5 +31,5 @@ envs:
  - CC
  - CXX
  - name: ENV_WITH_VALUE
-   value: yes
+   value: /bin/true
 ```

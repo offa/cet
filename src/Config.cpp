@@ -29,30 +29,21 @@ namespace cet
         std::vector<T> toSteps(const YAML::Node& node)
         {
             std::vector<T> elements;
+
             std::transform(node.begin(), node.end(), std::back_inserter(elements),
                            [](const auto& value) { return T{value.template as<std::string>()}; });
             return elements;
         }
 
-        std::tuple<std::string, std::optional<std::string>> parseEntry(const std::string& s)
+        std::vector<EnvStep> parseEnvSteps(const YAML::Node& node)
         {
-            const auto delimiter = std::find(s.cbegin(), s.cend(), '=');
+            std::vector<EnvStep> elements;
 
-            if (delimiter != s.cend())
-            {
-                return {std::string{s.cbegin(), delimiter}, std::string{std::next(delimiter), s.cend()}};
-            }
-            return {s, {}};
-        }
-
-        template <class T>
-        std::vector<T> keyValueToSteps(const YAML::Node& node)
-        {
-            std::vector<T> elements;
-            std::transform(node.begin(), node.end(), std::back_inserter(elements),
-                           [](const auto& element) {
-                               return std::make_from_tuple<T>(parseEntry(element.template as<std::string>()));
-                           });
+            std::transform(node.begin(), node.end(), std::back_inserter(elements), [](const auto& element) {
+                return element.IsScalar()
+                           ? EnvStep{element.template as<std::string>()}
+                           : EnvStep{element["name"].template as<std::string>(), element["value"].template as<std::string>()};
+            });
             return elements;
         }
 
@@ -60,7 +51,7 @@ namespace cet
         {
             return Config{toSteps<FileStep>(node["files"]),
                           toSteps<DirectoryStep>(node["directories"]),
-                          keyValueToSteps<EnvStep>(node["envs"])};
+                          parseEnvSteps(node["envs"])};
         }
     }
 

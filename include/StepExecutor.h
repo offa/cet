@@ -39,17 +39,11 @@ namespace cet
         template <class C, std::enable_if_t<std::is_base_of_v<TestStep, typename C::value_type>, int> = 0>
         Result executeSteps(const C& steps)
         {
-            std::size_t failedSteps{0};
-
-            std::for_each(std::cbegin(steps), std::cend(steps), [this, &failedSteps](const auto& step) {
+            const auto failedSteps = std::count_if(std::cbegin(steps), std::cend(steps), [this](const auto& step) {
                 const auto result = step.execute();
-
-                if (result != Result::Pass)
-                {
-                    ++failedSteps;
-                }
-
                 reporter_->printResult(result, step.describe());
+
+                return result != Result::Pass;
             });
 
             return failedSteps == 0 ? Result::Pass : Result::Fail;

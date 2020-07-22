@@ -22,7 +22,6 @@
 #include "FileSystemSteps.h"
 #include "EnvStep.h"
 #include <vector>
-#include <filesystem>
 
 namespace cet
 {

@@ -25,21 +25,23 @@ namespace cet
 {
     namespace
     {
+        template <class T, class ConverterFn>
+        std::vector<T> convertElements(const YAML::Node& node, ConverterFn converter)
+        {
+            std::vector<T> elements;
+            std::transform(node.begin(), node.end(), std::back_inserter(elements), converter);
+            return elements;
+        }
+
         template <class T>
         std::vector<T> toSteps(const YAML::Node& node)
         {
-            std::vector<T> elements;
-
-            std::transform(node.begin(), node.end(), std::back_inserter(elements),
-                           [](const auto& value) { return T{value.template as<std::string>()}; });
-            return elements;
+            return convertElements<T>(node, [](const auto& value) { return T{value.template as<std::string>()}; });
         }
 
         std::vector<EnvStep> parseEnvSteps(const YAML::Node& node)
         {
-            std::vector<EnvStep> elements;
-
-            std::transform(node.begin(), node.end(), std::back_inserter(elements), [](const auto& element) {
+            return convertElements<EnvStep>(node, [](const auto& element) {
                 if (element.IsScalar())
                 {
                     return EnvStep{element.template as<std::string>()};
@@ -53,7 +55,6 @@ namespace cet
                 }
                 return step;
             });
-            return elements;
         }
 
         Config fromYamlNode(const YAML::Node& node)

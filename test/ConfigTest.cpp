@@ -93,7 +93,7 @@ TEST_CASE("Parse config with multiple types", "[ConfigTest]")
 {
     const auto config = cet::fromYaml("files:\n - file1\n - file2\n - file3\n"
                                       "directories:\n - dir1\n - dir2\n"
-                                      "envs:\n - ENV_1\n - ENV_2");
+                                      "envs:\n - ENV_1\n - name: ENV_2\n   value: env2 value");
 
     const auto files = config.getFiles();
     CHECK(files.size() == 3);
@@ -110,4 +110,5 @@ TEST_CASE("Parse config with multiple types", "[ConfigTest]")
     CHECK(envs.size() == 2);
     CHECK(envs[0].getName() == "ENV_1");
     CHECK(envs[1].getName() == "ENV_2");
+    CHECK(*envs[1].getValue() == "env2 value");
 }

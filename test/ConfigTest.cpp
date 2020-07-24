@@ -61,12 +61,13 @@ TEST_CASE("Parse config directories returns empty if no entries", "[ConfigTest]"
 
 TEST_CASE("Parse config envs entries", "[ConfigTest]")
 {
-    const auto config = cet::fromYaml("envs:\n - AAA\n - BBB_BBB\n");
+    const auto config = cet::fromYaml("envs:\n - AAA\n - BBB_BBB\n - name: CCC\n");
     const auto envs = config.getEnvs();
 
-    CHECK(envs.size() == 2);
+    CHECK(envs.size() == 3);
     CHECK(envs[0].getName() == "AAA");
     CHECK(envs[1].getName() == "BBB_BBB");
+    CHECK(envs[2].getName() == "CCC");
 }
 
 TEST_CASE("Parse config env entries with value", "[ConfigTest]")

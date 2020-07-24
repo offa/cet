@@ -40,9 +40,18 @@ namespace cet
             std::vector<EnvStep> elements;
 
             std::transform(node.begin(), node.end(), std::back_inserter(elements), [](const auto& element) {
-                return element.IsScalar()
-                           ? EnvStep{element.template as<std::string>()}
-                           : EnvStep{element["name"].template as<std::string>(), element["value"].template as<std::string>()};
+                if (element.IsScalar())
+                {
+                    return EnvStep{element.template as<std::string>()};
+                }
+
+                EnvStep step{element["name"].template as<std::string>()};
+
+                if (element["value"])
+                {
+                    step.setValue(element["value"].template as<std::string>());
+                }
+                return step;
             });
             return elements;
         }

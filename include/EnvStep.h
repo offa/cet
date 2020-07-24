@@ -67,6 +67,11 @@ namespace cet
             return value_;
         }
 
+        void setValue(const std::string& value)
+        {
+            value_ = value;
+        }
+
     private:
         std::string name_;
         std::optional<std::string> value_;

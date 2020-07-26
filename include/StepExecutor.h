@@ -36,8 +36,8 @@ namespace cet
         {
         }
 
-        template <class C, std::enable_if_t<std::is_base_of_v<TestStep, typename C::value_type>, int> = 0>
-        Result executeSteps(const C& steps)
+        template <class Container, std::enable_if_t<std::is_base_of_v<TestStep, typename Container::value_type>, int> = 0>
+        Result executeSteps(const Container& steps)
         {
             const auto failedSteps = std::count_if(std::cbegin(steps), std::cend(steps), [this](const auto& step) {
                 const auto result = step.execute();

@@ -12,7 +12,7 @@ The tests are executed *within* the environment under tests.
 
 ### Configuration
 
-Existence of files or directories is configured by `cet.yml`:
+Configuration is done through a Yaml file (default: `cet.yml`):
 
 ###### Example
 

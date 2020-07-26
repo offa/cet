@@ -21,56 +21,20 @@
 
 #include "TestStep.h"
 #include <optional>
-#include <cstdlib>
 
 namespace cet
 {
     class EnvStep : public TestStep
     {
     public:
-        explicit EnvStep(const std::string& name, std::optional<std::string> value = {})
-            : name_(name), value_(value)
-        {
-        }
+        explicit EnvStep(const std::string& name, std::optional<std::string> value = {});
 
-        Result execute() const override
-        {
-            if (const auto envValue = std::getenv(name_.c_str()); envValue != nullptr)
-            {
-                if (value_)
-                {
-                    return envValue == *value_ ? Result::Pass : Result::Fail;
-                }
-                return Result::Pass;
-            }
-            return Result::Fail;
-        }
+        Result execute() const override;
+        std::string describe() const override;
 
-        std::string describe() const override
-        {
-            std::string msg = "Env exists: " + name_;
-
-            if (value_)
-            {
-                msg += " = '" + value_.value() + "'";
-            }
-            return msg;
-        };
-
-        std::string getName() const
-        {
-            return name_;
-        }
-
-        std::optional<std::string> getValue() const
-        {
-            return value_;
-        }
-
-        void setValue(const std::string& value)
-        {
-            value_ = value;
-        }
+        std::string getName() const;
+        std::optional<std::string> getValue() const;
+        void setValue(const std::string& value);
 
     private:
         std::string name_;

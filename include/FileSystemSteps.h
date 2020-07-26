@@ -29,24 +29,10 @@ namespace cet
     class FileStep : public TestStep
     {
     public:
-        explicit FileStep(std::filesystem::path file)
-            : file_(file)
-        {
-        }
+        explicit FileStep(std::filesystem::path file);
 
-        Result execute() const override
-        {
-            if (std::filesystem::is_regular_file(file_))
-            {
-                return Result::Pass;
-            }
-            return Result::Fail;
-        }
-
-        std::string describe() const override
-        {
-            return "File exists: " + file_.string();
-        }
+        Result execute() const override;
+        std::string describe() const override;
 
     private:
         std::filesystem::path file_;
@@ -56,24 +42,10 @@ namespace cet
     class DirectoryStep : public TestStep
     {
     public:
-        explicit DirectoryStep(std::filesystem::path file)
-            : file_(file)
-        {
-        }
+        explicit DirectoryStep(std::filesystem::path file);
 
-        Result execute() const override
-        {
-            if (std::filesystem::is_directory(file_))
-            {
-                return Result::Pass;
-            }
-            return Result::Fail;
-        }
-
-        std::string describe() const override
-        {
-            return "Directory exists: " + file_.string();
-        }
+        Result execute() const override;
+        std::string describe() const override;
 
     private:
         std::filesystem::path file_;

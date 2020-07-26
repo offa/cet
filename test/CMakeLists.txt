@@ -6,11 +6,11 @@ target_link_libraries(TestMain PUBLIC Catch2::Catch2 trompeloeil::trompeloeil)
 
 
 add_executable(ConfigTest ConfigTest.cpp)
-target_link_libraries(ConfigTest PRIVATE TestMain cet-config yaml-cpp::yaml-cpp)
+target_link_libraries(ConfigTest PRIVATE TestMain cet-config cet-steps yaml-cpp::yaml-cpp)
 add_test(ConfigTest ConfigTest)
 
 add_executable(StepsTest FileSystemStepsTest.cpp StepExecutorTest.cpp EnvStepTest.cpp)
-target_link_libraries(StepsTest PRIVATE TestMain)
+target_link_libraries(StepsTest PRIVATE TestMain cet-steps)
 add_test(StepsTest StepsTest)
 
 add_executable(ReporterTest StreamReporterTest.cpp)

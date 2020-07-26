@@ -40,10 +40,17 @@ namespace cet
         Result executeSteps(const Container& steps)
         {
             const auto failedSteps = std::count_if(std::cbegin(steps), std::cend(steps), [this](const auto& step) {
-                const auto result = step.execute();
-                reporter_->printResult(result, step.describe());
-
-                return result != Result::Pass;
+                try
+                {
+                    const auto result = step.execute();
+                    reporter_->printResult(result, step.describe());
+                    return result != Result::Pass;
+                }
+                catch (const std::exception& ex)
+                {
+                    reporter_->printError(ex.what());
+                }
+                return true;
             });
 
             return failedSteps == 0 ? Result::Pass : Result::Fail;

@@ -31,5 +31,7 @@ namespace cet
         virtual ~Reporter() = default;
 
         virtual void printResult(Result result, const std::string& description) = 0;
+        virtual void printError(const std::string& message) = 0;
     };
+
 }

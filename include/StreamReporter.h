@@ -31,6 +31,7 @@ namespace cet
         explicit StreamReporter(std::ostream& stream);
 
         void printResult(Result result, const std::string& description) override;
+        void printError(const std::string& message) override;
 
     private:
         std::ostream& stream_;

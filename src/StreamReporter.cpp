@@ -31,4 +31,9 @@ namespace cet
     {
         stream_ << (result == Result::Pass ? " [PASS] " : " [FAIL] ") << description << "\n";
     }
+
+    void StreamReporter::printError(const std::string& message)
+    {
+        stream_ << " [ERROR] " << message << "\n";
+    }
 }

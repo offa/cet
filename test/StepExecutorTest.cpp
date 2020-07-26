@@ -37,12 +37,17 @@ namespace
         void printResult([[maybe_unused]] cet::Result result, [[maybe_unused]] const std::string& description) override
         {
         }
+
+        void printError([[maybe_unused]] const std::string& message) override
+        {
+        }
     };
 
 
     class ReporterMock : public cet::Reporter
     {
         MAKE_MOCK2(printResult, void(cet::Result, const std::string&), override);
+        MAKE_MOCK1(printError, void(const std::string&), override);
     };
 
 
@@ -57,6 +62,11 @@ namespace
         void printResult(cet::Result result, const std::string& description) override
         {
             impl->printResult(result, description);
+        }
+
+        void printError(const std::string& message) override
+        {
+            impl->printError(message);
         }
 
     private:
@@ -119,4 +129,29 @@ TEST_CASE("Execute prints steps with result", "[StepExecutorTest]")
 
     cet::StepExecutor se{std::make_unique<ReporterAdapter>(reporter)};
     se.executeSteps(steps);
+}
+
+TEST_CASE("Execute catches exception thrown by step", "[StepExecutorTest]")
+{
+    std::vector<StepMock> steps{1};
+    REQUIRE_CALL(steps[0], execute()).THROW(std::runtime_error{"intentional thrown"});
+
+    auto reporter = std::make_shared<ReporterMock>();
+    REQUIRE_CALL(*reporter, printError("intentional thrown"));
+
+    cet::StepExecutor se{std::make_unique<ReporterAdapter>(reporter)};
+    CHECK(se.executeSteps(steps) == cet::Result::Fail);
+}
+
+TEST_CASE("Execute catches exception and continues steps", "[StepExecutorTest]")
+{
+    std::vector<StepMock> steps{3};
+    REQUIRE_CALL(steps[0], execute()).RETURN(cet::Result::Pass);
+    REQUIRE_CALL(steps[0], describe()).RETURN("");
+    REQUIRE_CALL(steps[1], execute()).THROW(std::runtime_error{"intentional"});
+    REQUIRE_CALL(steps[2], execute()).RETURN(cet::Result::Pass);
+    REQUIRE_CALL(steps[2], describe()).RETURN("");
+
+    cet::StepExecutor se{std::make_unique<IgnoreReporter>()};
+    CHECK(se.executeSteps(steps) == cet::Result::Fail);
 }

@@ -38,3 +38,12 @@ TEST_CASE("Failed test format", "[StreamReporterTest]")
 
     CHECK(oss.str() == " [FAIL] this failed\n");
 }
+
+TEST_CASE("Error format", "[StreamReporterTest]")
+{
+    std::ostringstream oss;
+    cet::StreamReporter reporter{oss};
+    reporter.printError("failed by an error");
+
+    CHECK(oss.str() == " [ERROR] failed by an error\n");
+}

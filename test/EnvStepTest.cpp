@@ -18,6 +18,7 @@
  */
 
 #include "EnvStep.h"
+#include "GuardedEnv.h"
 #include <catch2/catch.hpp>
 
 TEST_CASE("Env step without value", "[EnvStepTest]")
@@ -47,16 +48,16 @@ TEST_CASE("Env step tests existence of env", "[EnvStepTest]")
 {
     cet::EnvStep ex{"UNIT_TEST_ENV_STEP_VAR_1"};
     CHECK(ex.execute() == cet::Result::Fail);
-    setenv("UNIT_TEST_ENV_STEP_VAR_1", "test", 1);
+    cet::test::GuardedEnv env{"UNIT_TEST_ENV_STEP_VAR_1", "test"};
     CHECK(ex.execute() == cet::Result::Pass);
 }
 
 TEST_CASE("Env step with value tests existence of env with value", "[EnvStepTest]")
 {
-    setenv("UNIT_TEST_ENV_STEP_VAR_2", "<wrong value>", 1);
+    cet::test::GuardedEnv env{"UNIT_TEST_ENV_STEP_VAR_2", "<wrong value>"};
 
     cet::EnvStep ex{"UNIT_TEST_ENV_STEP_VAR_2", "correct value"};
     CHECK(ex.execute() == cet::Result::Fail);
-    setenv("UNIT_TEST_ENV_STEP_VAR_2", "correct value", 1);
+    env.reset("correct value");
     CHECK(ex.execute() == cet::Result::Pass);
 }

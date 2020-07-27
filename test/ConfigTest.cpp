@@ -25,7 +25,7 @@ using namespace Catch::Matchers;
 TEST_CASE("Parse config files entries", "[ConfigTest]")
 {
     const auto config = cet::fromYaml("files:\n - /tmp/file1\n - /tmp/dir/file2");
-    const auto files = config.getFiles();
+    const auto& files = config.getFiles();
 
     CHECK(files.size() == 2);
     CHECK_THAT(files[0].describe(), Contains("/tmp/file1"));
@@ -35,7 +35,7 @@ TEST_CASE("Parse config files entries", "[ConfigTest]")
 TEST_CASE("Parse config files returns empty if no entries", "[ConfigTest]")
 {
     const auto config = cet::fromYaml("# Nothing");
-    const auto files = config.getFiles();
+    const auto& files = config.getFiles();
 
     CHECK(files.size() == 0);
 }
@@ -43,7 +43,7 @@ TEST_CASE("Parse config files returns empty if no entries", "[ConfigTest]")
 TEST_CASE("Parse config directories entries", "[ConfigTest]")
 {
     const auto config = cet::fromYaml("directories:\n - /tmp/dir/x/\n - /tmp/dir2/y\n - /tmp/dir_3/zzzz");
-    const auto dirs = config.getDirectories();
+    const auto& dirs = config.getDirectories();
 
     CHECK(dirs.size() == 3);
     CHECK_THAT(dirs[0].describe(), Contains("/tmp/dir/x/"));
@@ -54,7 +54,7 @@ TEST_CASE("Parse config directories entries", "[ConfigTest]")
 TEST_CASE("Parse config directories returns empty if no entries", "[ConfigTest]")
 {
     const auto config = cet::fromYaml("# Nothing");
-    const auto dirs = config.getDirectories();
+    const auto& dirs = config.getDirectories();
 
     CHECK(dirs.size() == 0);
 }
@@ -62,7 +62,7 @@ TEST_CASE("Parse config directories returns empty if no entries", "[ConfigTest]"
 TEST_CASE("Parse config envs entries", "[ConfigTest]")
 {
     const auto config = cet::fromYaml("envs:\n - AAA\n - BBB_BBB\n - name: CCC\n");
-    const auto envs = config.getEnvs();
+    const auto& envs = config.getEnvs();
 
     CHECK(envs.size() == 3);
     CHECK(envs[0].getName() == "AAA");
@@ -73,7 +73,7 @@ TEST_CASE("Parse config envs entries", "[ConfigTest]")
 TEST_CASE("Parse config env entries with value", "[ConfigTest]")
 {
     const auto config = cet::fromYaml("envs:\n - name: AAA\n   value: 123\n - name: BBB\n   value: ccc\n");
-    const auto envs = config.getEnvs();
+    const auto& envs = config.getEnvs();
 
     CHECK(envs.size() == 2);
     CHECK(envs[0].getName() == "AAA");
@@ -85,7 +85,7 @@ TEST_CASE("Parse config env entries with value", "[ConfigTest]")
 TEST_CASE("Parse config envs returns empty if no entries", "[ConfigTest]")
 {
     const auto config = cet::fromYaml("# Nothing");
-    const auto envs = config.getEnvs();
+    const auto& envs = config.getEnvs();
 
     CHECK(envs.size() == 0);
 }
@@ -96,18 +96,18 @@ TEST_CASE("Parse config with multiple types", "[ConfigTest]")
                                       "directories:\n - dir1\n - dir2\n"
                                       "envs:\n - ENV_1\n - name: ENV_2\n   value: env2 value");
 
-    const auto files = config.getFiles();
+    const auto& files = config.getFiles();
     CHECK(files.size() == 3);
     CHECK_THAT(files[0].describe(), Contains("file1"));
     CHECK_THAT(files[1].describe(), Contains("file2"));
     CHECK_THAT(files[2].describe(), Contains("file3"));
 
-    const auto dirs = config.getDirectories();
+    const auto& dirs = config.getDirectories();
     CHECK(dirs.size() == 2);
     CHECK_THAT(dirs[0].describe(), Contains("dir1"));
     CHECK_THAT(dirs[1].describe(), Contains("dir2"));
 
-    const auto envs = config.getEnvs();
+    const auto& envs = config.getEnvs();
     CHECK(envs.size() == 2);
     CHECK(envs[0].getName() == "ENV_1");
     CHECK(envs[1].getName() == "ENV_2");

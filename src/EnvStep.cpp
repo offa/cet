@@ -29,7 +29,7 @@ namespace cet
 
     Result EnvStep::execute() const
     {
-        if (const auto envValue = std::getenv(name_.c_str()); envValue != nullptr)
+        if (const auto* envValue = std::getenv(name_.c_str()); envValue != nullptr)
         {
             if (value_)
             {

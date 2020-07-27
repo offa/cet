@@ -80,7 +80,7 @@ namespace cet
         return directories_;
     }
 
-    const std::vector<EnvStep> Config::getEnvs() const
+    const std::vector<EnvStep>& Config::getEnvs() const
     {
         return envs_;
     }

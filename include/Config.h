@@ -32,7 +32,7 @@ namespace cet
 
         const std::vector<FileStep>& getFiles() const;
         const std::vector<DirectoryStep>& getDirectories() const;
-        const std::vector<EnvStep> getEnvs() const;
+        const std::vector<EnvStep>& getEnvs() const;
 
     private:
         std::vector<FileStep> files_;

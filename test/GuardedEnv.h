@@ -26,7 +26,7 @@ namespace cet::test
     class GuardedEnv
     {
     public:
-        GuardedEnv(const std::string& name, const std::string value)
+        GuardedEnv(const std::string& name, const std::string& value)
             : name_(name), value_(value)
         {
             setEnv(value_);

@@ -20,7 +20,6 @@
 #pragma once
 
 #include <string>
-#include <cstdlib>
 
 namespace cet::test
 {
@@ -43,7 +42,8 @@ namespace cet::test
 
         void reset(const std::string& newValue)
         {
-            setEnv(newValue);
+            value_ = newValue;
+            setEnv(value_);
         }
 
 
@@ -51,16 +51,8 @@ namespace cet::test
         GuardedEnv& operator=(GuardedEnv&&) = delete;
 
     private:
-        void setEnv(const std::string& newValue)
-        {
-            value_ = newValue;
-            ::setenv(name_.c_str(), value_.c_str(), 1);
-        }
-
-        void clearEnv()
-        {
-            ::unsetenv(name_.c_str());
-        }
+        void setEnv(const std::string& newValue);
+        void clearEnv();
 
         std::string name_;
         std::string value_;

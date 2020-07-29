@@ -16,18 +16,19 @@ else()
     message(STATUS "Build Type : None")
 endif()
 
-
-add_compile_options(-Wall
-                    -Wextra
-                    -pedantic
-                    -pedantic-errors
-                    -Werror
-                    -Wshadow
-                    -Wold-style-cast
-                    -Wnull-dereference
-                    -Wnon-virtual-dtor
-                    -Woverloaded-virtual
-                    )
+if( NOT MSVC )
+    add_compile_options(-Wall
+                        -Wextra
+                        -pedantic
+                        -pedantic-errors
+                        -Werror
+                        -Wshadow
+                        -Wold-style-cast
+                        -Wnull-dereference
+                        -Wnon-virtual-dtor
+                        -Woverloaded-virtual
+                        )
+endif()
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

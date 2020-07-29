@@ -4,7 +4,7 @@ find_package(trompeloeil REQUIRED)
 add_library(TestMain TestMain.cpp)
 target_link_libraries(TestMain PUBLIC Catch2::Catch2 trompeloeil::trompeloeil)
 
-add_library(TestSupport GuardedEnv.cpp)
+add_library(TestSupport $<$<NOT:$<BOOL:${WIN32}>>:GuardedEnv.cpp> $<$<BOOL:${WIN32}>:GuardedEnvWin.cpp>)
 
 add_executable(ConfigTest ConfigTest.cpp)
 target_link_libraries(ConfigTest PRIVATE TestMain cet-config cet-steps yaml-cpp::yaml-cpp)

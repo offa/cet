@@ -59,6 +59,11 @@ namespace cet
 
         Config fromYamlNode(const YAML::Node& node)
         {
+            if (node.size() == 0)
+            {
+                throw YAML::Exception{YAML::Mark::null_mark(), "Configuration is empty"};
+            }
+
             return Config{toSteps<FileStep>(node["files"]),
                           toSteps<DirectoryStep>(node["directories"]),
                           parseEnvSteps(node["envs"])};

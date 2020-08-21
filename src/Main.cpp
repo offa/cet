@@ -38,13 +38,26 @@ namespace
         {
             argParser.parse_args(argc, argv);
         }
-        catch (const std::runtime_error& ex)
+        catch (const std::exception& ex)
         {
             std::cout << ex.what() << "\n"
                       << argParser;
             return {};
         }
         return argParser;
+    }
+
+    std::optional<cet::Config> loadConfig(const std::string& fileName)
+    {
+        try
+        {
+            return cet::fromYamlFile(fileName);
+        }
+        catch (const std::exception& ex)
+        {
+            std::cout << "ERROR: " << ex.what() << "\n";
+            return {};
+        }
     }
 
     constexpr int toExitCode(cet::Result result)
@@ -69,8 +82,13 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    const auto config = cet::fromYamlFile(args->get<std::string>("config"));
+    const auto config = loadConfig(args->get<std::string>("config"));
+
+    if (!config)
+    {
+        return 1;
+    }
 
     cet::StepExecutor executor{std::make_unique<cet::StreamReporter>(std::cout)};
-    return toExitCode(cet::executeAll(executor, config.getFiles(), config.getDirectories(), config.getEnvs()));
+    return toExitCode(cet::executeAll(executor, config->getFiles(), config->getDirectories(), config->getEnvs()));
 }

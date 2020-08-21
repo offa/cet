@@ -32,6 +32,29 @@ namespace
     };
 
 
+    class ResultStepMock : public cet::TestStep
+    {
+    public:
+        explicit ResultStepMock(cet::Result r)
+            : result(r)
+        {
+        }
+
+        cet::Result execute() const override
+        {
+            return result;
+        }
+
+        std::string describe() const override
+        {
+            return "";
+        }
+
+    private:
+        cet::Result result;
+    };
+
+
     class IgnoreReporter : public cet::Reporter
     {
         void printResult([[maybe_unused]] cet::Result result, [[maybe_unused]] const std::string& description) override
@@ -154,4 +177,18 @@ TEST_CASE("Execute catches exception and continues steps", "[StepExecutorTest]")
 
     cet::StepExecutor se{std::make_unique<IgnoreReporter>()};
     CHECK(se.executeSteps(steps) == cet::Result::Fail);
+}
+
+TEST_CASE("Execute all collects results of step executions", "[StepExecutorTest]")
+{
+    const std::vector passSteps{ResultStepMock{cet::Result::Pass}, ResultStepMock{cet::Result::Pass}};
+    const std::vector failSteps{ResultStepMock{cet::Result::Fail}, ResultStepMock{cet::Result::Pass}};
+
+    cet::StepExecutor se{std::make_unique<IgnoreReporter>()};
+    CHECK(executeAll(se, passSteps) == cet::Result::Pass);
+    CHECK(executeAll(se, passSteps, passSteps) == cet::Result::Pass);
+    CHECK(executeAll(se, passSteps, failSteps, passSteps) == cet::Result::Fail);
+    CHECK(executeAll(se, failSteps) == cet::Result::Fail);
+    CHECK(executeAll(se, passSteps, failSteps) == cet::Result::Fail);
+    CHECK(executeAll(se, failSteps, passSteps) == cet::Result::Fail);
 }

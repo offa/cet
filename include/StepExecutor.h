@@ -59,4 +59,18 @@ namespace cet
     private:
         std::unique_ptr<Reporter> reporter_;
     };
+
+
+    template <class... StepLists>
+    Result executeAll(cet::StepExecutor& executor, StepLists... stepLists)
+    {
+        std::size_t failed{0};
+        auto collect = [&failed, &executor](const auto& steps) {
+            failed += (executor.executeSteps(steps) != cet::Result::Pass);
+        };
+        (collect(std::forward<StepLists>(stepLists)), ...);
+
+        return (failed == 0 ? Result::Pass : Result::Fail);
+    }
+
 }

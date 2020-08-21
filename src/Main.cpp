@@ -47,17 +47,11 @@ namespace
         return argParser;
     }
 
-    template <class... Results>
-    constexpr int getExitCode(Results... results)
+    constexpr int toExitCode(cet::Result result)
     {
-        return ((results == cet::Result::Pass) && ...) ? 0 : 1;
+        return result == cet::Result::Pass ? 0 : 1;
     }
 
-    template <class... StepLists>
-    int execute(cet::StepExecutor& e, StepLists... stepLists)
-    {
-        return getExitCode((e.executeSteps(stepLists), ...));
-    }
 }
 
 int main(int argc, char* argv[])
@@ -78,5 +72,5 @@ int main(int argc, char* argv[])
     const auto config = cet::fromYamlFile(args->get<std::string>("config"));
 
     cet::StepExecutor executor{std::make_unique<cet::StreamReporter>(std::cout)};
-    return execute(executor, config.getFiles(), config.getDirectories(), config.getEnvs());
+    return toExitCode(cet::executeAll(executor, config.getFiles(), config.getDirectories(), config.getEnvs()));
 }

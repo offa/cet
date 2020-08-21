@@ -1,4 +1,4 @@
-# Cet – Container Environment Test
+# cet – Container Environment Test
 
 [![Build Status](https://travis-ci.com/offa/cet.svg?branch=master)](https://travis-ci.com/offa/cet)
 [![GitHub release](https://img.shields.io/github/release/offa/cet.svg)](https://github.com/offa/cet/releases)

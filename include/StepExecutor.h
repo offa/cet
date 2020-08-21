@@ -37,7 +37,7 @@ namespace cet
         }
 
         template <class Container, std::enable_if_t<std::is_base_of_v<TestStep, typename Container::value_type>, int> = 0>
-        Result executeSteps(const Container& steps)
+        Result executeSteps(const Container& steps) const
         {
             const auto failedSteps = std::count_if(std::cbegin(steps), std::cend(steps), [this](const auto& step) {
                 try
@@ -62,7 +62,7 @@ namespace cet
 
 
     template <class... StepLists>
-    Result executeAll(cet::StepExecutor& executor, StepLists... stepLists)
+    Result executeAll(const cet::StepExecutor& executor, StepLists... stepLists)
     {
         std::size_t failed{0};
         auto collect = [&failed, &executor](const auto& steps) {

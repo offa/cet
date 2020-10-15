@@ -22,6 +22,7 @@ mkdir build && cd build
 conan install \
     -g cmake_find_package \
     -g cmake_paths \
+    --build=missing \
     ..
 
 cmake -DCMAKE_BUILD_TYPE=Release ..

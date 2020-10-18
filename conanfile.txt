@@ -1,7 +1,7 @@
 [requires]
 yaml-cpp/0.6.3
 argparse/2.1
-catch2/2.13.0
+catch2/2.13.2
 trompeloeil/v38@rollbear/stable
 
 [generators]

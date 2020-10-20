@@ -2,15 +2,25 @@
 
 set -ex
 
-# Conan
-apt-get install -y python3-pip
-pip3 install -U conan
+PIP_BIN="pip"
+
+if [[ -z ${WINDIR+x} ]]
+then
+    apt-get install -y python3-pip ninja-build
+    PIP_BIN="pip3"
+fi
+
+${PIP_BIN} install -U conan
 conan profile new default --detect
 
 if [[ "${CXX}" == clang* ]]
 then
     export CXXFLAGS="-stdlib=libc++"
     conan profile update settings.compiler.libcxx=libc++ default
+elif [[ -n ${WINDIR+x} ]]
+then
+    export CC=cl
+    export CXX=cl
 else
     conan profile update settings.compiler.libcxx=libstdc++11 default
 fi
@@ -23,6 +33,6 @@ conan install \
     --build=missing \
     ..
 
-cmake -DCMAKE_BUILD_TYPE=Release ..
-make
-make unittest
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=./conan_paths.cmake -G Ninja ..
+cmake --build . -j
+cmake --build . --target unittest

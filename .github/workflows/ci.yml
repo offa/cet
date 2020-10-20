@@ -38,18 +38,6 @@ jobs:
         uses: ashutoshvarma/setup-ninja@master
       - name: Setup MSVC
         uses: seanmiddleditch/gha-setup-vsdevenv@master
-      - name: Setup Conan
-        run: |
-          pip install -U conan
-          conan profile new --detect default
       - name: Build
-        env:
-          CC: cl
-          CXX: cl
-        run: |
-          mkdir build && cd build
-          conan install -g cmake_find_package -g cmake_paths --build=missing ..
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=./conan_paths.cmake -G Ninja ..
-          cmake --build . -j
-          cmake --build . --target unittest
+        run: script/ci_build.sh
         shell: bash

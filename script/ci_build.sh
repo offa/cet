@@ -4,10 +4,14 @@ set -ex
 
 PIP_BIN="pip"
 
+if ! command -v "${PIP_BIN}" &> /dev/null
+then
+    PIP_BIN="pip3"
+fi
+
 if [[ -z ${WINDIR+x} ]]
 then
     apt-get install -y python3-pip ninja-build
-    PIP_BIN="pip3"
 fi
 
 ${PIP_BIN} install -U conan

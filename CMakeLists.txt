@@ -49,6 +49,11 @@ include("${CMAKE_BINARY_DIR}/conan_paths.cmake" OPTIONAL)
 find_package(yaml-cpp REQUIRED)
 find_package(argparse REQUIRED)
 
+if (NOT TARGET yaml-cpp::yaml-cpp)
+    add_library(yaml-cpp::yaml-cpp INTERFACE IMPORTED)
+    target_link_libraries(yaml-cpp::yaml-cpp INTERFACE yaml-cpp)
+endif()
+
 include_directories("include")
 add_subdirectory(src)
 

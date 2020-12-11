@@ -1,8 +1,8 @@
 [requires]
 yaml-cpp/0.6.3
 argparse/2.1
-catch2/2.13.2
-trompeloeil/v38@rollbear/stable
+catch2/2.13.3
+trompeloeil/v39@rollbear/stable
 
 [generators]
 cmake_find_package

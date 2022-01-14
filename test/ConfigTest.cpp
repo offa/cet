@@ -20,7 +20,8 @@
 #include "Config.h"
 #include <catch2/catch.hpp>
 
-using namespace Catch::Matchers;
+using Catch::Matchers::Contains;
+using Catch::Matchers::Message;
 
 TEST_CASE("Parse config throws on empty config", "[ConfigTest]")
 {

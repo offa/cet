@@ -1,7 +1,7 @@
 [requires]
 yaml-cpp/0.7.0
-argparse/2.2
-catch2/2.13.8
+argparse/2.3
+catch2/2.13.9
 trompeloeil/42
 
 [generators]

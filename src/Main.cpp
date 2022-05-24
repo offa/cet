@@ -24,6 +24,7 @@
 #include "StepExecutor.h"
 #include "StreamReporter.h"
 #include <optional>
+#include <utility> // Workaround for argparse #177
 #include <argparse/argparse.hpp>
 
 namespace

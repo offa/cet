@@ -18,10 +18,11 @@
  */
 
 #include "Config.h"
-#include <catch2/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_all.hpp>
 
-using Catch::Matchers::Contains;
 using Catch::Matchers::Message;
+using Catch::Matchers::ContainsSubstring;
 
 TEST_CASE("Parse config throws on empty config", "[ConfigTest]")
 {
@@ -35,8 +36,8 @@ TEST_CASE("Parse config files entries", "[ConfigTest]")
     const auto& files = config.getFiles();
 
     CHECK(files.size() == 2);
-    CHECK_THAT(files[0].describe(), Contains("/tmp/file1"));
-    CHECK_THAT(files[1].describe(), Contains("/tmp/dir/file2"));
+    CHECK_THAT(files[0].describe(), ContainsSubstring("/tmp/file1"));
+    CHECK_THAT(files[1].describe(), ContainsSubstring("/tmp/dir/file2"));
 }
 
 TEST_CASE("Parse config directories entries", "[ConfigTest]")
@@ -45,9 +46,9 @@ TEST_CASE("Parse config directories entries", "[ConfigTest]")
     const auto& dirs = config.getDirectories();
 
     CHECK(dirs.size() == 3);
-    CHECK_THAT(dirs[0].describe(), Contains("/tmp/dir/x/"));
-    CHECK_THAT(dirs[1].describe(), Contains("/tmp/dir2/y"));
-    CHECK_THAT(dirs[2].describe(), Contains("/tmp/dir_3/zzzz"));
+    CHECK_THAT(dirs[0].describe(), ContainsSubstring("/tmp/dir/x/"));
+    CHECK_THAT(dirs[1].describe(), ContainsSubstring("/tmp/dir2/y"));
+    CHECK_THAT(dirs[2].describe(), ContainsSubstring("/tmp/dir_3/zzzz"));
 }
 
 TEST_CASE("Parse config envs entries", "[ConfigTest]")
@@ -81,14 +82,14 @@ TEST_CASE("Parse config with multiple types", "[ConfigTest]")
 
     const auto& files = config.getFiles();
     CHECK(files.size() == 3);
-    CHECK_THAT(files[0].describe(), Contains("file1"));
-    CHECK_THAT(files[1].describe(), Contains("file2"));
-    CHECK_THAT(files[2].describe(), Contains("file3"));
+    CHECK_THAT(files[0].describe(), ContainsSubstring("file1"));
+    CHECK_THAT(files[1].describe(), ContainsSubstring("file2"));
+    CHECK_THAT(files[2].describe(), ContainsSubstring("file3"));
 
     const auto& dirs = config.getDirectories();
     CHECK(dirs.size() == 2);
-    CHECK_THAT(dirs[0].describe(), Contains("dir1"));
-    CHECK_THAT(dirs[1].describe(), Contains("dir2"));
+    CHECK_THAT(dirs[0].describe(), Catch::Matchers::ContainsSubstring("dir1"));
+    CHECK_THAT(dirs[1].describe(), Catch::Matchers::ContainsSubstring("dir2"));
 
     const auto& envs = config.getEnvs();
     CHECK(envs.size() == 2);

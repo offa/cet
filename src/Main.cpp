@@ -31,9 +31,8 @@ namespace
 {
     std::optional<argparse::ArgumentParser> parseArguments(int argc, char* argv[])
     {
-        argparse::ArgumentParser argParser{"cet"};
+        argparse::ArgumentParser argParser{"cet", cet::version()};
         argParser.add_argument("config").default_value(std::string{"cet.yml"});
-        argParser.add_argument("--version").default_value(false).implicit_value(true);
 
         try
         {
@@ -75,12 +74,6 @@ int main(int argc, char* argv[])
     if (!args)
     {
         return 1;
-    }
-
-    if (args->get<bool>("--version"))
-    {
-        std::cout << "cet v" << cet::version() << "\n";
-        return 0;
     }
 
     const auto config = loadConfig(args->get<std::string>("config"));

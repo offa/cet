@@ -36,12 +36,14 @@ namespace cet
         template <class T>
         std::vector<T> toSteps(const YAML::Node& node)
         {
-            return convertElements<T>(node, [](const auto& value) { return T{value.template as<std::string>()}; });
+            return convertElements<T>(node, [](const auto& value)
+                                      { return T{value.template as<std::string>()}; });
         }
 
         std::vector<EnvStep> parseEnvSteps(const YAML::Node& node)
         {
-            return convertElements<EnvStep>(node, [](const auto& element) {
+            return convertElements<EnvStep>(node, [](const auto& element)
+                                            {
                 if (element.IsScalar())
                 {
                     return EnvStep{element.template as<std::string>()};
@@ -53,8 +55,7 @@ namespace cet
                 {
                     step.setValue(element["value"].template as<std::string>());
                 }
-                return step;
-            });
+                return step; });
         }
 
         Config fromYamlNode(const YAML::Node& node)

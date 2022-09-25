@@ -39,7 +39,8 @@ namespace cet
         template <class Container, std::enable_if_t<std::is_base_of_v<TestStep, typename Container::value_type>, int> = 0>
         Result executeSteps(const Container& steps) const
         {
-            const auto failedSteps = std::count_if(std::cbegin(steps), std::cend(steps), [this](const auto& step) {
+            const auto failedSteps = std::count_if(std::cbegin(steps), std::cend(steps), [this](const auto& step)
+                                                   {
                 try
                 {
                     const auto result = step.execute();
@@ -50,8 +51,7 @@ namespace cet
                 {
                     reporter_->printError(ex.what());
                 }
-                return true;
-            });
+                return true; });
 
             return failedSteps == 0 ? Result::Pass : Result::Fail;
         }
@@ -65,7 +65,8 @@ namespace cet
     Result executeAll(const cet::StepExecutor& executor, StepLists... stepLists)
     {
         std::size_t failed{0};
-        auto collect = [&failed, &executor](const auto& steps) {
+        auto collect = [&failed, &executor](const auto& steps)
+        {
             failed += (executor.executeSteps(steps) != cet::Result::Pass);
         };
         (collect(std::forward<StepLists>(stepLists)), ...);

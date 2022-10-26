@@ -1,4 +1,4 @@
-set(TEMPLATE_DIR "${CMAKE_MODULE_PATH}/template")
+set(TEMPLATE_DIR "${PROJECT_SOURCE_DIR}/cmake/template")
 set(GENERATED_DIR "${CMAKE_BINARY_DIR}/generated")
 
 

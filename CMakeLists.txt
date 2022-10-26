@@ -7,7 +7,7 @@ option(UNITTEST "Build Unit Tests" ON)
 message(STATUS "Unit Tests : ${UNITTEST}")
 
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 
 if( CMAKE_BUILD_TYPE )

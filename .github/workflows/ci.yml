@@ -38,7 +38,7 @@ jobs:
     steps:
       - uses: actions/checkout@main
       - name: Setup Ninja
-        uses: seanmiddleditch/gha-setup-ninja@master
+        uses: turtlesec-no/get-ninja@main
       - name: Setup MSVC
         uses: seanmiddleditch/gha-setup-vsdevenv@master
       - name: Build

@@ -40,7 +40,7 @@ jobs:
       - name: Setup Ninja
         uses: turtlesec-no/get-ninja@main
       - name: Setup MSVC
-        uses: seanmiddleditch/gha-setup-vsdevenv@master
+        uses: ilammy/msvc-dev-cmd@v1
       - name: Build
         run: script/ci_build.sh
         shell: bash

@@ -3,6 +3,7 @@
 set -ex
 
 PIP_BIN="pip"
+BUILD_TYPE="Release"
 
 if ! command -v "${PIP_BIN}" &> /dev/null
 then
@@ -16,30 +17,28 @@ then
 fi
 
 ${PIP_BIN} install -U conan
-conan profile new default --detect
+conan profile detect
 
 if [[ "${CXX}" == clang* ]]
 then
     export CXXFLAGS="-stdlib=libc++"
-    conan profile update settings.compiler.libcxx=libc++ default
+    sed -i 's/^compiler.libcxx=.*$/compiler.libcxx=libc++/g' ~/.conan2/profiles/default
 elif [[ -n ${WINDIR+x} ]]
 then
     export CC=cl
     export CXX=cl
-else
-    conan profile update settings.compiler.libcxx=libstdc++11 default
 fi
-
-cp script/settings.yml ~/.conan/
 
 mkdir build && cd build
 
 conan install \
-    -g cmake_find_package \
-    -g cmake_paths \
+    -of . \
     --build=missing \
+    -s compiler.cppstd=17 \
+    -s build_type=${BUILD_TYPE} \
+    -c "tools.cmake.cmaketoolchain:generator=Ninja" \
     ..
 
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=./conan_paths.cmake -G Ninja ..
+cmake --preset conan-release ..
 cmake --build . -j
 cmake --build . --target unittest

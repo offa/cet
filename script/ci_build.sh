@@ -16,7 +16,7 @@ then
     apt-get install -y python3-pip ninja-build
 fi
 
-${PIP_BIN} install -U conan
+${PIP_BIN} install -U conan==2.0.2
 conan profile detect
 
 if [[ "${CXX}" == clang* ]]

@@ -8,10 +8,10 @@ jobs:
     strategy:
       matrix:
         compiler:
+          - gcc:13
           - gcc:12
-          - gcc:11
           - clang:16
-          - clang:15
+          # - clang:15 # Disabled due to broken image
     container:
       image: "registry.gitlab.com/offa/docker-images/${{ matrix.compiler }}"
     name: "${{ matrix.compiler }}"

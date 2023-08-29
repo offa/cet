@@ -2,7 +2,7 @@
 yaml-cpp/0.7.0
 argparse/2.9
 catch2/3.4.0
-trompeloeil/43
+trompeloeil/45
 
 [generators]
 CMakeToolchain

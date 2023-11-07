@@ -1,5 +1,5 @@
 [requires]
-yaml-cpp/0.7.0
+yaml-cpp/0.8.0
 argparse/2.9
 catch2/3.4.0
 trompeloeil/46

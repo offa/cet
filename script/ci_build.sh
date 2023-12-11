@@ -12,7 +12,7 @@ fi
 
 if [[ -z ${WINDIR+x} ]]
 then
-    apt update
+    apt-get update
     apt-get install -y python3-pip ninja-build
 fi
 

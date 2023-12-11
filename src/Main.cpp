@@ -83,6 +83,6 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    cet::StepExecutor executor{std::make_unique<cet::StreamReporter>(std::cout)};
+    const cet::StepExecutor executor{std::make_unique<cet::StreamReporter>(std::cout)};
     return toExitCode(cet::executeAll(executor, config->getFiles(), config->getDirectories(), config->getEnvs()));
 }

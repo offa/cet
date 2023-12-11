@@ -9,9 +9,7 @@ jobs:
       matrix:
         compiler:
           - gcc:13
-          - gcc:12
           - clang:17
-          - clang:16
     container:
       image: "registry.gitlab.com/offa/docker-images/${{ matrix.compiler }}"
     name: "${{ matrix.compiler }}"
@@ -47,5 +45,5 @@ jobs:
     - uses: DoozyX/clang-format-lint-action@master
       name: "Verify formatting"
       with:
-        clangFormatVersion: 15
+        clangFormatVersion: 16
 

@@ -23,19 +23,20 @@
 #include "EnvStep.h"
 #include "StepExecutor.h"
 #include "StreamReporter.h"
+#include <vector>
 #include <optional>
 #include <argparse/argparse.hpp>
 
 namespace
 {
-    std::optional<argparse::ArgumentParser> parseArguments(int argc, char* argv[])
+    std::optional<std::string> parseArguments(const std::vector<std::string>& args)
     {
         argparse::ArgumentParser argParser{"cet", cet::version()};
         argParser.add_argument("config").default_value(std::string{"cet.yml"});
 
         try
         {
-            argParser.parse_args(argc, argv);
+            argParser.parse_args(args);
         }
         catch (const std::exception& ex)
         {
@@ -43,7 +44,7 @@ namespace
                       << argParser;
             return {};
         }
-        return argParser;
+        return argParser.get<std::string>("config");
     }
 
     std::optional<cet::Config> loadConfig(const std::string& fileName)
@@ -68,14 +69,14 @@ namespace
 
 int main(int argc, char* argv[])
 {
-    auto args = parseArguments(argc, argv);
+    auto args = parseArguments({argv, argv + argc});
 
     if (!args)
     {
         return 1;
     }
 
-    const auto config = loadConfig(args->get<std::string>("config"));
+    const auto config = loadConfig(*args);
 
     if (!config)
     {

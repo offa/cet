@@ -1,6 +1,6 @@
 [requires]
 yaml-cpp/0.8.0
-argparse/2.9
+argparse/3.0
 catch2/3.4.0
 trompeloeil/46
 

@@ -32,6 +32,7 @@ fi
 
 if [[ -f "${CONAN_CACHE}" ]]; then
     conan cache restore "${CONAN_CACHE}"
+    conan list "*"
 fi
 
 mkdir build && cd build

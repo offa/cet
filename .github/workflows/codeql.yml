@@ -15,6 +15,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@main
+      - name: Cache Conan Packages
+        uses: actions/cache@main
+        with:
+          path: "conan_cache_save.tgz"
+          key: conan-${{ runner.os }}-codeql-${{ hashFiles('conanfile.txt') }}
       - name: CodeQL Initialization
         uses: github/codeql-action/init@v3
         with:

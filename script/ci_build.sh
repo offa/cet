@@ -4,6 +4,7 @@ set -ex
 
 PIP_BIN="pip"
 BUILD_TYPE="Release"
+CONAN_CACHE="conan_cache_save.tgz"
 
 if ! command -v "${PIP_BIN}" &> /dev/null
 then
@@ -29,6 +30,10 @@ then
     export CXX=cl
 fi
 
+if [[ -f "${CONAN_CACHE}" ]]; then
+    conan cache restore "${CONAN_CACHE}"
+fi
+
 mkdir build && cd build
 
 conan install \
@@ -42,3 +47,5 @@ conan install \
 cmake --preset conan-release ..
 cmake --build . -j
 cmake --build . --target unittest
+
+conan cache save --file "../${CONAN_CACHE}" "*"

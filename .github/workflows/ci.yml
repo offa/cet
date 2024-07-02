@@ -15,6 +15,11 @@ jobs:
     name: "${{ matrix.compiler }}"
     steps:
       - uses: actions/checkout@main
+      - name: Cache Conan Packages
+        uses: actions/cache@main
+        with:
+          path: "conan_cache_save.tgz"
+          key: conan-${{ runner.os }}-${{ matrix.compiler }}-${{ hashFiles('conanfile.txt') }}
       - name: Build
         run: script/ci_build.sh
 
@@ -32,6 +37,11 @@ jobs:
         uses: turtlesec-no/get-ninja@main
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
+      - name: Cache Conan Packages
+        uses: actions/cache@main
+        with:
+          path: conan_cache_save.tgz
+          key: conan-${{ runner.os }}-${{ matrix.compiler }}-${{ hashFiles('conanfile.txt') }}
       - name: Build
         run: script/ci_build.sh
         shell: bash

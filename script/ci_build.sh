@@ -2,21 +2,16 @@
 
 set -ex
 
-PIP_BIN="pip"
 BUILD_TYPE="Release"
-
-if ! command -v "${PIP_BIN}" &> /dev/null
-then
-    PIP_BIN="pip3"
-fi
 
 if [[ -z ${WINDIR+x} ]]
 then
+    export PATH=$HOME/.local/bin:$PATH
     apt-get update
-    apt-get install -y python3-pip ninja-build
+    apt-get install -y pipx ninja-build
 fi
 
-${PIP_BIN} install -U conan
+pipx install conan
 conan profile detect
 
 if [[ "${CXX}" == clang* ]]

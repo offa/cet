@@ -29,7 +29,7 @@ mkdir build && cd build
 conan install \
     -of . \
     --build=missing \
-    -s compiler.cppstd=17 \
+    -s compiler.cppstd=20 \
     -s build_type=${BUILD_TYPE} \
     -c "tools.cmake.cmaketoolchain:generator=Ninja" \
     ..

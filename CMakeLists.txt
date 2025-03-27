@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12.0)
 
-project(cet VERSION 0.0.5)
+project(cet VERSION 0.0.6)
 message(STATUS "~~~ ${PROJECT_NAME} v${PROJECT_VERSION} ~~~")
 
 option(UNITTEST "Build Unit Tests" ON)

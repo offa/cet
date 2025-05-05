@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         compiler:
-          - gcc:14
+          - gcc:15
           - clang:20
     container:
       image: "registry.gitlab.com/offa/docker-images/${{ matrix.compiler }}"

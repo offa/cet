@@ -25,11 +25,7 @@ jobs:
 
   build_windows:
     runs-on: windows-latest
-    strategy:
-      matrix:
-        compiler:
-          - msvc
-    name: "${{ matrix.compiler }}"
+    name: "MSVC"
     steps:
       - uses: actions/checkout@main
       - name: Setup Ninja

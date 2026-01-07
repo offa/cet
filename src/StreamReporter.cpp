@@ -1,7 +1,7 @@
 /*
  * cet - Container Environment Test
  *
- * Copyright (C) 2020-2025  offa
+ * Copyright (C) 2020-2026  offa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

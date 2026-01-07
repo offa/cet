@@ -3,7 +3,7 @@
 [![CI](https://github.com/offa/cet/workflows/ci/badge.svg)](https://github.com/offa/cet/actions)
 [![GitHub release](https://img.shields.io/github/release/offa/cet.svg)](https://github.com/offa/cet/releases)
 [![License](https://img.shields.io/badge/license-GPLv3-yellow.svg)](LICENSE)
-[![C++](https://img.shields.io/badge/c++-17-green.svg)]()
+[![C++](https://img.shields.io/badge/c++-20-green.svg)]()
 
 Simple test execution, mostly for container environments.
 

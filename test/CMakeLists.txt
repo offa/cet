@@ -1,30 +1,32 @@
 find_package(Catch2 REQUIRED)
 find_package(trompeloeil REQUIRED)
 
-add_library(TestLibs INTERFACE)
-target_link_libraries(TestLibs INTERFACE Catch2::Catch2WithMain trompeloeil::trompeloeil)
-
 add_library(TestSupport $<$<NOT:$<BOOL:${WIN32}>>:GuardedEnv.cpp> $<$<BOOL:${WIN32}>:GuardedEnvWin.cpp>)
 
-add_executable(ConfigTest ConfigTest.cpp)
+function(add_test_suite name)
+    add_executable(${name} ${ARGN})
+    target_link_libraries(${name} PRIVATE Catch2::Catch2WithMain trompeloeil::trompeloeil)
+    add_test(${name} ${name})
+
+    # Workaround for catch2 #3076
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "22")
+        target_compile_options(${name} PRIVATE -Wno-c2y-extensions)
+    endif()
+endfunction()
+
+add_test_suite(ConfigTest ConfigTest.cpp)
 target_link_libraries(ConfigTest
     PRIVATE
         cet-config
         cet-steps
         yaml-cpp::yaml-cpp
-        Catch2::Catch2WithMain
-        trompeloeil::trompeloeil
         )
-add_test(ConfigTest ConfigTest)
 
-add_executable(StepsTest FileSystemStepsTest.cpp StepExecutorTest.cpp EnvStepTest.cpp)
-target_link_libraries(StepsTest PRIVATE TestLibs TestSupport cet-steps)
-add_test(StepsTest StepsTest)
+add_test_suite(StepsTest FileSystemStepsTest.cpp StepExecutorTest.cpp EnvStepTest.cpp)
+target_link_libraries(StepsTest PRIVATE TestSupport cet-steps)
 
-add_executable(ReporterTest StreamReporterTest.cpp)
-target_link_libraries(ReporterTest PRIVATE TestLibs cet-reporter)
-add_test(ReporterTest ReporterTest)
-
+add_test_suite(ReporterTest StreamReporterTest.cpp)
+target_link_libraries(ReporterTest PRIVATE cet-reporter)
 
 
 add_custom_target(unittest ConfigTest

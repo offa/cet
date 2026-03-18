@@ -35,7 +35,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 include(Template)
-include("${CMAKE_BINARY_DIR}/conan_paths.cmake" OPTIONAL)
 
 find_package(yaml-cpp REQUIRED)
 find_package(argparse REQUIRED)

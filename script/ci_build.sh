@@ -6,13 +6,9 @@ BUILD_TYPE="Release"
 
 if [[ -z ${WINDIR+x} ]]
 then
-    export PATH=$HOME/.local/bin:$PATH
     apt-get update
-    apt-get install -y pipx ninja-build
+    apt-get install -y ninja-build
 fi
-
-pipx install conan
-conan profile detect
 
 if [[ "${CXX}" == clang* ]]
 then

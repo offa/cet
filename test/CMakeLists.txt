@@ -4,6 +4,11 @@ find_package(trompeloeil REQUIRED)
 add_library(TestLibs INTERFACE)
 target_link_libraries(TestLibs INTERFACE Catch2::Catch2WithMain trompeloeil::trompeloeil)
 
+# Workaround for catch2 #3076
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "22")
+    target_compile_options(TestLibs INTERFACE -Wno-c2y-extensions)
+endif()
+
 add_library(TestSupport $<$<NOT:$<BOOL:${WIN32}>>:GuardedEnv.cpp> $<$<BOOL:${WIN32}>:GuardedEnvWin.cpp>)
 
 add_executable(ConfigTest ConfigTest.cpp)

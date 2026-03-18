@@ -4,11 +4,7 @@ set -ex
 
 BUILD_TYPE="Release"
 
-if [[ -z ${WINDIR+x} ]]
-then
-    apt-get update
-    apt-get install -y ninja-build
-fi
+pipx install ninja
 
 if [[ "${CXX}" == clang* ]]
 then

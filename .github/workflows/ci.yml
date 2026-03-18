@@ -30,8 +30,6 @@ jobs:
     steps:
       - uses: actions/checkout@main
       - uses: offa/conan-action@e9d361b93acd968d992b3bbb15b02b0beefb6b37
-      - name: Setup Ninja
-        uses: turtlesec-no/get-ninja@3e85fb0044ada1440765803dd87c838edf79def8
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756
       - name: Build

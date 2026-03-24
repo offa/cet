@@ -30,7 +30,7 @@ jobs:
     name: "msvc"
     steps:
       - uses: actions/checkout@main
-      - uses: TheMrMilchmann/setup-msvc-dev@v4
+      - uses: TheMrMilchmann/setup-msvc-dev@2900649ebaee13f31832b80ca0e9400d0cc6f337
         with:
           arch: x64
       - uses: offa/conan-action@e9d361b93acd968d992b3bbb15b02b0beefb6b37
